@@ -1,0 +1,1043 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>Lagunas Jurídicas</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;1,6..72,400;1,6..72,500&display=swap">
+<style>
+/* Disposición: cabecera fija con dos pestañas; flashcards centradas en una columna; simulacro en dos columnas (lista de conceptos + lagunas) */
+:root{
+  --bg:#0a1115; --bg-2:#0e181d; --surface:#122029; --surface-2:#172a35; --line:#23394a; --line-soft:#1b2d38;
+  --fg:#e3e8e7; --fg-dim:#a3b2b7; --fg-faint:#6f828a;
+  --brass:#d6b26a; --brass-dim:#a98a4c; --on-brass:#171103;
+  --ok:#6cc7a3; --ok-bg:#12302a; --bad:#e6735f; --bad-bg:#35201d; --omit:#8fa3ad; --omit-bg:#1a2a33;
+  --serif:"Newsreader",Georgia,"Times New Roman",serif;
+  --sans:"IBM Plex Sans",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --mono:"IBM Plex Mono",ui-monospace,Menlo,Consolas,monospace;
+  --r:6px;
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+html{background:var(--bg)}
+body{
+  margin:0;background:var(--bg);color:var(--fg);font-family:var(--sans);font-size:15px;line-height:1.55;
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));
+  padding-block:0 56px;min-height:100%;
+}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);background:var(--bg);z-index:30}
+button,input,select{font:inherit;color:inherit}
+button{cursor:pointer}
+:focus-visible{outline:2px solid var(--brass);outline-offset:2px}
+.wrap{max-width:1120px;margin:0 auto}
+
+/* Cabecera */
+.top{position:sticky;top:env(safe-area-inset-top,0px);z-index:20;background:var(--bg);border-bottom:1px solid var(--line-soft)}
+.top .wrap{display:flex;align-items:center;justify-content:space-between;gap:12px 24px;flex-wrap:wrap;padding-block:12px}
+.brand{display:flex;flex-direction:column;min-width:0}
+.brand b{font-family:var(--serif);font-size:1.45rem;font-weight:500;letter-spacing:.005em;line-height:1.1}
+.brand span{font-family:var(--mono);font-size:.68rem;letter-spacing:.09em;text-transform:uppercase;color:var(--fg-faint)}
+.tabs{display:flex;gap:4px;background:var(--bg-2);border:1px solid var(--line-soft);border-radius:var(--r);padding:3px}
+.tabs button{border:0;background:none;padding:8px 16px;border-radius:4px;color:var(--fg-dim);font-weight:500}
+.tabs button[aria-selected="true"]{background:var(--surface-2);color:var(--brass)}
+.tabs button:hover{color:var(--fg)}
+
+main{padding-block:28px}
+h1,h2,h3{font-family:var(--serif);font-weight:500;margin:0;text-wrap:balance}
+.eyebrow{font-family:var(--mono);font-size:.7rem;letter-spacing:.1em;text-transform:uppercase;color:var(--fg-faint)}
+.btn{border:1px solid var(--line);background:var(--surface);padding:10px 18px;border-radius:var(--r);font-weight:500;color:var(--fg);transition:background .15s,border-color .15s}
+.btn:hover{background:var(--surface-2);border-color:var(--brass-dim)}
+.btn:disabled{opacity:.4;cursor:not-allowed}
+.btn.primary{background:var(--brass);border-color:var(--brass);color:var(--on-brass)}
+.btn.primary:hover{background:#e2c07c}
+.btn.ok{border-color:var(--ok);color:var(--ok);background:var(--ok-bg)}
+.btn.no{border-color:var(--bad);color:var(--bad);background:var(--bad-bg)}
+.btn.small{padding:6px 12px;font-size:.85rem}
+.btn.ghost{background:none}
+
+/* Controles de filtro */
+.filters{display:flex;flex-wrap:wrap;gap:12px 18px;align-items:flex-end;margin-bottom:20px}
+.field{display:flex;flex-direction:column;gap:4px;min-width:0}
+.field label,.field .lab{font-family:var(--mono);font-size:.68rem;letter-spacing:.08em;text-transform:uppercase;color:var(--fg-faint)}
+select{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:8px 10px;max-width:100%}
+.check{display:flex;align-items:center;gap:8px;color:var(--fg-dim);font-size:.9rem;cursor:pointer}
+.check input{accent-color:var(--brass);width:16px;height:16px}
+
+/* Flashcards */
+.flash{max-width:760px;margin:0 auto}
+.stats{display:flex;flex-wrap:wrap;justify-content:space-between;gap:6px 16px;font-family:var(--mono);font-size:.78rem;color:var(--fg-dim);margin-bottom:8px}
+.stats .ok{color:var(--ok)}.stats .no{color:var(--bad)}
+.bar{height:4px;background:var(--line-soft);border-radius:2px;overflow:hidden;margin-bottom:18px;display:flex}
+.bar i{display:block;height:100%}
+.bar .b-ok{background:var(--ok)}.bar .b-no{background:var(--bad)}.bar .b-cur{background:var(--brass-dim)}
+.scene{perspective:1400px}
+.card{display:grid;width:100%;text-align:left;background:none;border:0;padding:0;position:relative;transform-style:preserve-3d;transition:transform .55s cubic-bezier(.3,.7,.2,1)}
+.card.flipped{transform:rotateY(180deg)}
+.face{grid-area:1/1;backface-visibility:hidden;-webkit-backface-visibility:hidden;min-height:340px;
+  background:linear-gradient(180deg,var(--surface-2),var(--surface));border:1px solid var(--line);border-radius:10px;
+  padding:26px clamp(18px,4vw,40px) 22px;display:flex;flex-direction:column;gap:18px}
+.face.back{transform:rotateY(180deg);border-color:var(--brass-dim)}
+.face .meta{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap}
+.face .body{flex:1;display:flex;flex-direction:column;justify-content:center;gap:14px}
+.face .hint{font-family:var(--mono);font-size:.7rem;letter-spacing:.06em;color:var(--fg-faint);text-transform:uppercase}
+.stmt,.sentence{font-family:var(--serif);font-size:clamp(1.2rem,2.6vw,1.5rem);line-height:1.5;margin:0}
+.blank{display:inline-block;min-width:5.5ch;border-bottom:2px solid var(--brass);margin:0 .15em;transform:translateY(2px)}
+mark.fill{background:none;color:var(--brass);border-bottom:2px solid var(--brass);padding:0 .1em;font-style:italic}
+.answer{font-family:var(--serif);font-size:clamp(1.8rem,5vw,2.6rem);color:var(--brass);line-height:1.15;margin:0;font-style:italic}
+.also{font-size:.85rem;color:var(--fg-dim)}
+.mark-badge{font-family:var(--mono);font-size:.7rem;letter-spacing:.06em;text-transform:uppercase;padding:2px 8px;border-radius:3px;border:1px solid var(--line)}
+.mark-badge.ok{color:var(--ok);border-color:var(--ok)}.mark-badge.no{color:var(--bad);border-color:var(--bad)}
+.nav{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:16px}
+.nav.marks{grid-template-columns:1fr 1fr}
+.keys{margin-top:14px;font-family:var(--mono);font-size:.7rem;color:var(--fg-faint);text-align:center}
+.done{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:34px clamp(18px,4vw,40px);text-align:center;display:flex;flex-direction:column;align-items:center;gap:14px}
+.done h2{font-size:1.9rem}
+.done .row{display:flex;flex-wrap:wrap;gap:10px;justify-content:center}
+.empty{color:var(--fg-dim);text-align:center;padding:40px 0}
+
+/* Simulacro: configuración */
+.setup{max-width:720px;margin:0 auto;display:flex;flex-direction:column;gap:26px}
+.setup h2{font-size:2rem}
+.setup p.lead{margin:6px 0 0;color:var(--fg-dim);max-width:60ch}
+.seg{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:10px}
+.opt{display:block;border:1px solid var(--line);background:var(--surface);border-radius:var(--r);padding:14px 16px;cursor:pointer;text-align:left;width:100%}
+.opt b{display:block;font-weight:600;margin-bottom:2px}
+.opt span{color:var(--fg-dim);font-size:.88rem}
+.opt[aria-pressed="true"]{border-color:var(--brass);background:var(--surface-2)}
+.opt[aria-pressed="true"] b{color:var(--brass)}
+.row-fields{display:flex;flex-wrap:wrap;gap:16px 24px}
+.note{border:1px solid var(--line-soft);background:var(--bg-2);border-radius:var(--r);padding:12px 14px;color:var(--fg-dim);font-size:.88rem}
+
+/* Simulacro: examen */
+.exambar{position:sticky;top:calc(env(safe-area-inset-top,0px) + var(--hdr,62px));z-index:15;background:var(--bg-2);border:1px solid var(--line);border-radius:var(--r);
+  display:flex;align-items:center;justify-content:space-between;gap:10px 18px;flex-wrap:wrap;padding:10px 14px;margin-bottom:18px}
+.timer{font-family:var(--mono);font-size:1.5rem;font-variant-numeric:tabular-nums;letter-spacing:.02em}
+.timer.warn{color:var(--brass)}.timer.crit{color:var(--bad)}
+.exambar .info{font-family:var(--mono);font-size:.78rem;color:var(--fg-dim)}
+.exambar .acts{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.examgrid{display:grid;grid-template-columns:300px minmax(0,1fr);gap:28px;align-items:start}
+.examgrid.solo{grid-template-columns:minmax(0,1fr);max-width:820px;margin:0 auto}
+.listpanel{position:sticky;top:calc(env(safe-area-inset-top,0px) + var(--hdr,62px) + var(--bar,60px) + 12px);max-height:calc(100vh - var(--hdr,62px) - var(--bar,60px) - 40px);overflow:auto;background:var(--bg-2);border:1px solid var(--line-soft);border-radius:var(--r);padding:14px}
+.listpanel h3{font-size:1.05rem;margin-bottom:2px}
+.listpanel p{margin:0 0 10px;font-size:.8rem;color:var(--fg-faint)}
+.chips{display:flex;flex-wrap:wrap;gap:6px}
+.chip{border:1px solid var(--line);background:var(--surface);border-radius:4px;padding:5px 9px;font-size:.84rem;text-align:left;line-height:1.3}
+.chip:hover{border-color:var(--brass-dim)}
+.chip.used{opacity:.4;text-decoration:line-through;text-decoration-color:var(--fg-faint)}
+.sheetbtn{display:none}
+.qs{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:6px}
+.q{display:grid;grid-template-columns:34px minmax(0,1fr);gap:8px;padding:14px 12px;border-radius:var(--r);border:1px solid transparent}
+.q.active{background:var(--bg-2);border-color:var(--line)}
+.q .num{font-family:var(--mono);font-size:.82rem;color:var(--fg-faint);padding-top:4px}
+.q .stmt{font-size:1.12rem}
+.q input.ans{display:inline-block;width:min(100%,24ch);min-width:15ch;margin:2px 3px;background:var(--surface);border:0;border-bottom:2px solid var(--brass-dim);border-radius:3px 3px 0 0;padding:3px 8px;font-family:var(--sans);font-size:.95rem;color:var(--brass);vertical-align:baseline}
+.q input.ans:focus{outline:none;border-bottom-color:var(--brass);background:var(--surface-2)}
+.q input.ans.filled{border-bottom-color:var(--brass)}
+.q .clr{border:0;background:none;color:var(--fg-faint);padding:0 4px;font-size:1rem}
+.q .clr:hover{color:var(--bad)}
+
+/* Resultados */
+.result{max-width:860px;margin:0 auto;display:flex;flex-direction:column;gap:26px}
+.score{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px}
+.tile{border:1px solid var(--line);background:var(--surface);border-radius:var(--r);padding:16px 18px;display:flex;flex-direction:column;gap:2px}
+.tile .n{font-family:var(--serif);font-size:2.8rem;line-height:1;font-variant-numeric:tabular-nums}
+.tile .l{font-family:var(--mono);font-size:.7rem;letter-spacing:.09em;text-transform:uppercase;color:var(--fg-dim)}
+.tile.ok .n{color:var(--ok)}.tile.bad .n{color:var(--bad)}.tile.omit .n{color:var(--omit)}.tile.grade .n{color:var(--brass)}
+.headline{display:flex;flex-wrap:wrap;gap:6px 24px;align-items:baseline;justify-content:space-between}
+.headline h2{font-size:2rem}
+.filt{display:flex;flex-wrap:wrap;gap:8px}
+.filt button{border:1px solid var(--line);background:none;border-radius:99px;padding:5px 14px;font-size:.85rem;color:var(--fg-dim)}
+.filt button[aria-pressed="true"]{border-color:var(--brass);color:var(--brass);background:var(--surface)}
+.items{display:flex;flex-direction:column;gap:14px;list-style:none;margin:0;padding:0}
+.item{border:1px solid var(--line);background:var(--surface);border-radius:var(--r);padding:16px clamp(14px,3vw,22px);display:flex;flex-direction:column;gap:12px}
+.item.s-ok{border-left:4px solid var(--ok)}.item.s-bad{border-left:4px solid var(--bad)}.item.s-omit{border-left:4px solid var(--omit)}
+.item .hd{display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;align-items:center}
+.tag{font-family:var(--mono);font-size:.7rem;letter-spacing:.08em;text-transform:uppercase;padding:2px 9px;border-radius:3px}
+.tag.ok{background:var(--ok-bg);color:var(--ok)}.tag.bad{background:var(--bad-bg);color:var(--bad)}.tag.omit{background:var(--omit-bg);color:var(--omit)}
+.item .sentence{font-size:1.1rem}
+.item .sentence .given{color:var(--bad);text-decoration:line-through;text-decoration-thickness:1.5px;font-style:italic}
+.item .sentence .arrow{color:var(--fg-faint);font-family:var(--sans);font-size:.9em}
+.item .sentence .right{color:var(--ok);font-style:italic;border-bottom:2px solid var(--ok)}
+.fb{margin:0;color:var(--fg);font-size:.94rem}
+.fb + .fb{margin-top:-4px}
+.fb b{font-weight:600}
+.fb .no{color:var(--bad)}.fb .yes{color:var(--ok)}
+.src{font-family:var(--mono);font-size:.7rem;letter-spacing:.05em;color:var(--fg-faint);text-transform:uppercase}
+
+@media (max-width:860px){
+  .top{position:static}
+  .examgrid{grid-template-columns:minmax(0,1fr)}
+  .listpanel{position:fixed;left:0;right:0;bottom:0;top:auto;max-height:58vh;border-radius:12px 12px 0 0;z-index:25;transform:translateY(105%);transition:transform .25s;
+    padding-bottom:calc(14px + env(safe-area-inset-bottom,0px));padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));border-color:var(--line)}
+  .listpanel.open{transform:none}
+  .sheetbtn{display:inline-flex;position:fixed;right:max(16px,env(safe-area-inset-right,0px));bottom:calc(16px + env(safe-area-inset-bottom,0px));z-index:24;box-shadow:0 6px 24px #000a}
+}
+@media (max-width:560px){
+  body{font-size:14.5px}
+  .face{min-height:300px}
+  .timer{font-size:1.3rem}
+  .q{grid-template-columns:26px minmax(0,1fr);padding:12px 6px}
+}
+@media (prefers-reduced-motion:reduce){
+  .card{transition:none}
+  .listpanel{transition:none}
+}
+
+</style>
+<header class="top"><div class="wrap">
+  <div class="brand"><b>Lagunas jurídicas</b><span>Obligaciones y Contratos · UACH · Lic. Luis Peredo Robles</span></div>
+  <div class="tabs" role="tablist" aria-label="Modalidad">
+    <button role="tab" data-tab="flashcards" aria-selected="true">Flashcards</button>
+    <button role="tab" data-tab="simulacro" aria-selected="false">Simulacro</button>
+  </div>
+</div></header>
+<main class="wrap">
+  <section id="view-flash" aria-label="Flashcards"><div class="flash" id="flash-root"></div></section>
+  <section id="view-sim" aria-label="Simulacro" hidden><div id="sim-root"></div></section>
+</main>
+<script>
+/* Normalización y coincidencia tolerante a errores de ortografía */
+function norm(s){
+  return String(s||"").toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g,"")
+    .replace(/[^a-z0-9]+/g," ").trim().replace(/\s+/g," ");
+}
+function stripArt(s){ // quita artículos y "contrato de" iniciales
+  let t=s;
+  for(let i=0;i<3;i++){
+    t=t.replace(/^(el|la|los|las|un|una|del|de la|de los|de las|contrato de|contrato del|contratos de|contratos)\s+/,"");
+  }
+  return t;
+}
+function osa(a,b){ // Damerau-Levenshtein (transposición adyacente cuenta 1)
+  const n=a.length,m=b.length; if(!n) return m; if(!m) return n;
+  const d=[]; for(let i=0;i<=n;i++){d.push(new Array(m+1).fill(0)); d[i][0]=i;}
+  for(let j=0;j<=m;j++) d[0][j]=j;
+  for(let i=1;i<=n;i++) for(let j=1;j<=m;j++){
+    const c=a[i-1]===b[j-1]?0:1;
+    d[i][j]=Math.min(d[i-1][j]+1,d[i][j-1]+1,d[i-1][j-1]+c);
+    if(i>1&&j>1&&a[i-1]===b[j-2]&&a[i-2]===b[j-1]) d[i][j]=Math.min(d[i][j],d[i-2][j-2]+1);
+  }
+  return d[n][m];
+}
+function tol(len){ return len<=4?0: len<=8?1: len<=13?2: 3; }
+function formsOf(c){
+  const set=new Set();
+  [c.name,...(c.alias||[])].forEach(x=>{const n=norm(x); if(n){set.add(n); const t=stripArt(n); if(t) set.add(t);}});
+  return [...set];
+}
+/* Devuelve {concept, dist, exact} del concepto más cercano a lo escrito, o null */
+function resolve(input, bank, tolerant){
+  const raw=norm(input); if(!raw) return null;
+  const variants=[...new Set([raw, stripArt(raw)])].filter(Boolean);
+  let best=null, second=Infinity;
+  for(const c of bank){
+    let cd=Infinity, cl=0;
+    for(const f of c._forms){
+      for(const v of variants){
+        const dd=(v===f)?0:osa(v,f);
+        if(dd<cd){cd=dd; cl=f.length;}
+      }
+    }
+    const lim=tolerant?tol(cl):0;
+    if(cd<=lim){
+      if(!best||cd<best.dist){ if(best) second=Math.min(second,best.dist); best={concept:c,dist:cd,exact:cd===0}; }
+      else second=Math.min(second,cd);
+    }
+  }
+  if(best && second===best.dist && best.dist>0) return null; // empate ambiguo
+  return best;
+}
+
+
+const B=[];const C=(id,name,alias,tema,grupo,sl,d,lag)=>({id,name,alias,tema,grupo,sl,d,lag});
+// C(id, nombre, [alias], tema(O|C), grupo, diapositiva, d (qué designa), [lagunas con ____])
+B.push(
+C("acto-juridico","Acto jurídico",["actos juridicos"],"O","Acto y hecho jurídico","Diap. 2",
+ "la manifestación exterior de voluntad hecha con el fin de crear, transmitir, modificar o extinguir una obligación o un derecho, y que produce el efecto deseado por su autor porque el derecho sanciona esa voluntad",
+ ["____ es la manifestación exterior de voluntad que se hace con el fin de crear, transmitir, modificar o extinguir una obligación o un derecho, y que produce el efecto deseado por su autor, porque el derecho sanciona esa voluntad.",
+  "Las conductas del hombre en que hay una manifestación de voluntad, con la intención de producir consecuencias de derecho, siempre y cuando la norma ampare esa manifestación y sancione los efectos deseados por el autor, constituyen el ____."]),
+C("acto-unilateral","Acto jurídico unilateral",["actos juridicos unilaterales","acto unilateral","actos unilaterales"],"O","Acto y hecho jurídico","Diap. 3",
+ "el acto en que interviene en su formación una sola voluntad, o varias concurrentes a un mismo fin, como el testamento, el perdón de una deuda o la oferta al público",
+ ["El ____ es aquel en que intervienen en su formación una sola voluntad o varias concurrentes a un mismo fin; lo son el testamento, el perdón de una deuda o la oferta al público."]),
+C("acto-plurilateral","Acto jurídico plurilateral",["actos juridicos plurilaterales","acto plurilateral","actos plurilaterales"],"O","Acto y hecho jurídico","Diap. 3",
+ "el acto que para su formación requiere dos o más voluntades que buscan efectos jurídicos diversos entre sí, como la compraventa, donde el comprador quiere un artículo y el vendedor una prestación en dinero",
+ ["El ____ es aquel que para su formación requiere de dos o más voluntades que buscan efectos jurídicos diversos entre sí; por ejemplo, en la compraventa se persiguen fines contrarios."]),
+C("convenio-amplio","Convenio lato sensu",["convenio en sentido amplio","convenio en sentido lato","convenio latu sensu"],"O","Acto y hecho jurídico","Diap. 32",
+ "el acuerdo de voluntades para crear, transferir, modificar o extinguir derechos y obligaciones",
+ ["El ____, o convenio en sentido amplio, se define como el acuerdo de voluntades para crear, transferir, modificar o extinguir derechos y obligaciones."]),
+C("convenio-estricto","Convenio stricto sensu",["convenio strictu sensu","convenio en sentido estricto","convenio estricto"],"O","Acto y hecho jurídico","Diap. 32",
+ "el acuerdo de dos o más personas para modificar o extinguir derechos y obligaciones que ya existían como fruto de un contrato anterior",
+ ["El ____ es el acuerdo de dos o más personas para modificar o extinguir derechos y obligaciones; en él no «nacen» derechos y obligaciones, sino que se modifican o extinguen los que ya existían."]),
+C("contrato","Contrato",["contratos"],"O","Acto y hecho jurídico","Diap. 14 y 32",
+ "el acuerdo de dos o más personas para crear o transferir derechos y obligaciones",
+ ["El ____ propiamente se define como el acuerdo de dos o más personas para crear o transferir derechos y obligaciones.",
+  "La fuente más abundante de las obligaciones es el ____, razón por la cual se le dedica mayor tiempo de estudio."]),
+C("hecho-juridico","Hecho jurídico en sentido estricto",["hecho juridico","hechos juridicos en sentido estricto","hecho juridico stricto sensu"],"O","Acto y hecho jurídico","Diap. 4",
+ "la manifestación de voluntad que produce efectos de derecho independientemente de la intención del autor, o un hecho de la naturaleza al que la ley vincula efectos jurídicos",
+ ["El ____ es una manifestación de voluntad que produce efectos de derecho independientemente de la intención del autor para que esos efectos se generen, o un hecho de la naturaleza al que la ley vincula efectos jurídicos."]),
+C("hecho-hombre","Hechos del hombre o voluntarios",["hecho del hombre","hechos voluntarios","hechos del hombre","hecho voluntario"],"O","Acto y hecho jurídico","Diap. 4",
+ "las conductas humanas que producen consecuencias jurídicas de manera independiente a la voluntad de su autor, y que se subclasifican en lícitos e ilícitos",
+ ["Los ____ son conductas humanas que producen consecuencias jurídicas de manera independiente a la voluntad de su autor para que se generen o no; se subclasifican en lícitos e ilícitos."]),
+C("hecho-naturaleza","Hechos de la naturaleza",["hecho de la naturaleza","hechos naturales"],"O","Acto y hecho jurídico","Diap. 4",
+ "los acontecimientos en que no interviene la voluntad humana y que el derecho considera como dato para generar consecuencias jurídicas, como el nacimiento o la muerte de una persona",
+ ["Los ____ son acontecimientos en donde para nada interviene la voluntad humana y que el derecho considera como dato para que se generen ciertas consecuencias jurídicas, como el nacimiento de una persona o la muerte de otra."]),
+
+C("voluntad","Voluntad",["la voluntad","voluntades"],"O","Elementos del acto jurídico","Diap. 5",
+ "el elemento de existencia del acto jurídico consistente en una o más voluntades jurídicas",
+ ["Elemento de existencia del acto jurídico consistente en una o más voluntades jurídicas: la ____."]),
+C("objeto-acto","Objeto",["el objeto","objeto del acto juridico"],"O","Elementos del acto jurídico","Diap. 5",
+ "el elemento de existencia que consiste en que las voluntades tengan como finalidad producir una consecuencia sancionada por el derecho",
+ ["El ____ es el elemento de existencia del acto jurídico que consiste en que las voluntades tengan como finalidad producir una consecuencia sancionada por el derecho; sin voluntad y sin éste no se podrá crear un acto jurídico."]),
+C("forma-solemne","Forma solemne",["solemnidad","la forma solemne"],"O","Elementos del acto jurídico","Diap. 5",
+ "el elemento que solo cuando es exigida como solemnidad constituye requisito de existencia, como el matrimonio que debe efectuarse ante el oficial del Registro Civil",
+ ["La ____ solo es requisito de existencia del acto jurídico cuando es solemne, como ocurre en el matrimonio, que debe efectuarse ante el oficial del Registro Civil."]),
+C("voluntades-capaces","Voluntades capaces",["capacidad","capacidad de las voluntades","voluntad capaz"],"O","Elementos del acto jurídico","Diap. 6",
+ "el primer requisito de validez del acto jurídico: que quienes externan su voluntad tengan aptitud legal para hacerlo",
+ ["Primer requisito de validez del acto jurídico, que exige que quienes manifiestan su voluntad tengan aptitud legal para hacerlo: ____."]),
+C("voluntades-libres","Voluntades libres",["libertad de las voluntades","voluntad libre","ausencia de vicios"],"O","Elementos del acto jurídico","Diap. 6-8",
+ "el requisito de validez que exige que el consentimiento esté exento de vicios como el error, la violencia, el dolo, la mala fe o la lesión",
+ ["Requisito de validez del acto jurídico que exige que el consentimiento esté exento de vicios (error, violencia, dolo, mala fe y lesión): ____."]),
+C("licitud","Objeto, motivo o fin lícitos",["licitud","objeto motivo o fin licito","fin licito","objeto licito"],"O","Elementos del acto jurídico","Diap. 6",
+ "el requisito de validez que exige que el objeto, el motivo o el fin del acto no estén prohibidos por la ley",
+ ["Requisito de validez del acto jurídico consistente en que el objeto, el motivo o el fin del acto no contravengan la ley: ____."]),
+C("forma-legal","Forma prescrita por la ley",["forma legal","formalidad","forma prescrita"],"O","Elementos del acto jurídico","Diap. 6",
+ "el requisito de validez que exige que las voluntades se externen en la forma que la ley establece",
+ ["Requisito de validez del acto jurídico consistente en que las voluntades se externen en la ____."]),
+
+C("error","Error",["el error"],"O","Vicios de la voluntad","Diap. 7",
+ "el vicio de la voluntad que se produce cuando se forma una voluntad interna a partir de una creencia inexacta; el consentimiento existe, pero no se emitió de manera inteligente",
+ ["El ____ es un vicio de la voluntad que se produce cuando se forma una voluntad interna a partir de una creencia inexacta; el consentimiento existe, pero está viciado porque no se emitió de manera inteligente."]),
+C("violencia","Violencia",["la violencia"],"O","Vicios de la voluntad","Diap. 7",
+ "el vicio de la voluntad que se produce cuando se utiliza fuerza física o amenazas para obligar a alguien a realizar un acto, poniendo en peligro su vida, libertad, honra, salud o una parte importante de sus bienes",
+ ["La ____ es un vicio de la voluntad que se produce cuando se utiliza fuerza física o amenazas para obligar a alguien a realizar un acto; puede ser física o moral."]),
+C("dolo","Dolo",["el dolo"],"O","Vicios de la voluntad","Diap. 8",
+ "el artificio o sugestión que se utiliza para inducir a error a una de las partes en un negocio jurídico",
+ ["El ____ es un artificio o sugestión que se utiliza para inducir a error a una de las partes en un negocio jurídico, lo que puede llevar a declarar nulo el acto."]),
+C("mala-fe","Mala fe",["la mala fe"],"O","Vicios de la voluntad","Diap. 8",
+ "la disimulación de un error por una de las partes una vez que lo conoce, que puede implicar falta de rectitud, malicia o intención fraudulenta",
+ ["La ____ es la disimulación del error por una de las partes en un negocio jurídico, una vez que lo conoce."]),
+C("lesion","Lesión",["la lesion"],"O","Vicios de la voluntad","Diap. 8",
+ "el supuesto en que alguien, explotando la suma ignorancia, notoria inexperiencia o extrema miseria del otro, obtiene un lucro excesivo evidentemente desproporcionado a lo que él se obliga",
+ ["Cuando alguno, explotando la suma ignorancia, notoria inexperiencia o extrema miseria del otro, obtiene un lucro excesivo evidentemente desproporcionado a lo que él por su parte se obliga, se configura la ____ y el perjudicado puede pedir la rescisión del contrato."]),
+
+C("nulidad","Nulidad",["la nulidad"],"O","Nulidad","Diap. 9-10 y 30",
+ "la sanción que existe cuando el acto jurídico se ha realizado imperfectamente en alguno de sus elementos orgánicos, o cuando el fin perseguido está condenado por la ley",
+ ["Hay ____ cuando el acto jurídico se ha realizado imperfectamente en uno de sus elementos orgánicos, aunque estos se presenten completos, o cuando el fin perseguido por sus autores está condenado por la ley.",
+  "Cuando los actos no cumplen los requisitos de validez se produce la ____, que, si es absoluta, o si siendo relativa no se convalida, es causal de extinción de los derechos y obligaciones que nacen del acto."]),
+C("nulidad-absoluta","Nulidad absoluta",[],"O","Nulidad","Diap. 10",
+ "la que se produce cuando el acto vulnera el orden público o las normas de observancia general; no tiene efectos jurídicos, puede declararse de oficio por cualquier juez y es insaneable",
+ ["La ____ se produce cuando un acto jurídico vulnera el orden público o las normas de observancia general; es insaneable y no desaparece por confirmación ni por prescripción."]),
+C("nulidad-relativa","Nulidad relativa",[],"O","Nulidad","Diap. 10",
+ "la que se produce cuando se omiten requisitos de validez en relación con la calidad o estado de las personas que ejecutan el acto; el acto es válido, pero los interesados pueden pedir su anulación, y es saneable",
+ ["La ____ se produce cuando se omiten requisitos para la validez del acto en relación con la calidad o estado de las personas que lo ejecutan; el acto es válido, pero es saneable o susceptible de subsanación."])
+);
+B.push(
+C("obligacion","Obligación",["la obligacion","obligaciones"],"O","Teoría de la obligación","Diap. 11",
+ "el vínculo jurídico que constriñe a un sujeto acreedor con un sujeto deudor y da nacimiento a prestaciones de dar, hacer y no hacer",
+ ["La ____ es el vínculo jurídico que constriñe a un sujeto acreedor con un sujeto deudor y da nacimiento a prestaciones de dar, hacer y no hacer."]),
+C("derecho-credito","Derecho de crédito",["derechos de credito","derecho de credito"],"O","Teoría de la obligación","Diap. 11",
+ "la facultad que tiene un sujeto llamado acreedor de exigir de otro denominado deudor el cumplimiento de una obligación de dar, hacer o no hacer",
+ ["El ____ es la facultad que tiene un sujeto llamado acreedor de exigir de otro, denominado deudor, el cumplimiento de una obligación de dar, hacer o no hacer."]),
+C("acreedor","Acreedor",["sujeto activo","el acreedor"],"O","Teoría de la obligación","Diap. 12",
+ "el sujeto activo de la obligación, titular del derecho, que puede exigir el cumplimiento",
+ ["El ____ es el denominado sujeto activo de la obligación: el titular del derecho, el que puede exigir su cumplimiento."]),
+C("deudor","Deudor",["sujeto pasivo","obligado","el deudor"],"O","Teoría de la obligación","Diap. 12",
+ "el sujeto pasivo de la obligación, aquel que debe cumplir, llamado también «obligado»",
+ ["El ____ es el llamado sujeto pasivo de la obligación: el que debe cumplir, y a quien se denomina también «obligado»."]),
+C("objeto-obligacion","Objeto de la obligación",["objeto de las obligaciones","materia de la obligacion"],"O","Teoría de la obligación","Diap. 12",
+ "la materia de la obligación, que puede consistir en dar, hacer o no hacer (abstención)",
+ ["El ____ es la materia de la misma obligación; puede ser una obligación de dar, de hacer o de no hacer, una abstención."]),
+C("vinculo-juridico","Vínculo jurídico",["vinculo juridico","el vinculo juridico"],"O","Teoría de la obligación","Diap. 12",
+ "la relación que se establece entre el sujeto acreedor y el sujeto deudor, en la que normalmente ambas partes pueden tener el carácter de sujeto activo y pasivo según el aspecto que se analice",
+ ["Entre el sujeto acreedor y el sujeto deudor se establece un ____, una obligación, en el que normalmente ambas partes pueden ser sujeto activo y pasivo según el aspecto de la relación que se analice."]),
+C("obligacion-dar","Obligación de dar",["obligaciones de dar","dar"],"O","Teoría de la obligación","Diap. 12 y 18",
+ "la prestación consistente en entregar una cosa, que debe existir en la naturaleza, ser determinada o determinable en cuanto a su especie y estar en el comercio",
+ ["En la ____, la cosa debe existir en la naturaleza, ser determinada o determinable en cuanto a su especie y estar en el comercio."]),
+C("obligacion-hacer","Obligación de hacer",["obligaciones de hacer","hacer"],"O","Teoría de la obligación","Diap. 12 y 18",
+ "la prestación consistente en realizar un hecho positivo, que debe ser posible y lícito",
+ ["La ____ tiene por objeto un hecho positivo que debe ser posible y lícito."]),
+C("obligacion-no-hacer","Obligación de no hacer",["obligaciones de no hacer","no hacer","abstencion"],"O","Teoría de la obligación","Diap. 12 y 18",
+ "la prestación consistente en una abstención o hecho negativo, que debe ser posible y lícito",
+ ["La ____ consiste en una abstención, un hecho negativo que debe ser posible y lícito."]),
+
+C("fuentes","Fuentes de las obligaciones",["fuentes de la obligacion","fuente de las obligaciones","fuentes"],"O","Fuentes de las obligaciones","Diap. 13",
+ "los hechos y actos jurídicos que originan las obligaciones",
+ ["Se llaman ____ a los hechos y actos jurídicos que las originan."]),
+C("unilateral-voluntad","Declaración unilateral de la voluntad",["declaracion unilateral de voluntad","voluntad unilateral","declaracion unilateral"],"O","Fuentes de las obligaciones","Diap. 14",
+ "la declaración hecha con la intención de obligarse hacia otras personas independientemente de su consentimiento, como las ofertas de venta, las ofertas de recompensa, los títulos de crédito a la orden o al portador y el testamento",
+ ["La ____ con la intención, por parte de quien la hace, de obligarse hacia otras personas independientemente del consentimiento de estas, es fuente de obligaciones; ejemplos son las ofertas de venta, las ofertas de recompensa, los títulos de crédito y el testamento."]),
+C("cuasicontratos","Cuasicontratos",["cuasicontrato","cuasi contratos","cuasi contrato"],"O","Fuentes de las obligaciones","Diap. 15",
+ "los hechos voluntarios y lícitos que obligan a las personas sin que haya existido un previo acuerdo de voluntades",
+ ["Se llaman ____ los hechos voluntarios y lícitos que obligan a las personas, pero sin que haya existido un previo acuerdo de voluntades."]),
+C("gestion-negocios","Gestión de negocios",["gestion de negocio","gestion de negocios ajenos"],"O","Fuentes de las obligaciones","Diap. 15",
+ "el cuasicontrato en que una persona, sin mandato y sin estar obligada, se encarga de un asunto de otro, debiendo obrar conforme a los intereses del dueño del negocio",
+ ["La ____ consiste en que una persona, sin mandato y sin estar obligada a ello, se encargue de un asunto de otro, debiendo obrar conforme a los intereses del dueño del negocio."]),
+C("pago-indebido","Pago de lo indebido",["pago indebido","pago de lo no debido"],"O","Fuentes de las obligaciones","Diap. 15",
+ "el cuasicontrato que ocurre cuando una persona paga por error a otra una suma que no debía, caso en que la ley ordena a quien la recibió que la restituya",
+ ["El ____ ocurre cuando una persona paga, por error, a otra, una suma que no debía, caso en el cual la ley ordena que quien la recibió la restituya."]),
+C("enriquecimiento","Enriquecimiento sin causa",["enriquecimiento ilegitimo","enriquecimiento sin causa legitima"],"O","Fuentes de las obligaciones","Diap. 15",
+ "el cuasicontrato por el cual quien se enriqueció sin causa legítima a costa de otro debe restituir los bienes ajenos en la medida de su enriquecimiento",
+ ["Como nadie debe enriquecerse sin causa legítima a costa de otro, en el ____ quien se enriqueció en detrimento de un patrimonio ajeno debe restituir, en la medida de su enriquecimiento, los bienes ajenos."]),
+C("actos-ilicitos","Hechos ilícitos",["actos ilicitos","hecho ilicito","acto ilicito"],"O","Fuentes de las obligaciones","Diap. 16",
+ "la fuente de obligaciones que comprende los delitos y los cuasidelitos, y que obliga a quien los comete a reparar el daño causado",
+ ["Los ____ son de dos especies, delitos y cuasidelitos; en ambos casos la ley ordena que quien los comete debe reparar el daño causado."]),
+C("delito","Delito",["delitos","el delito"],"O","Fuentes de las obligaciones","Diap. 16",
+ "el hecho ilícito que cae dentro del derecho penal",
+ ["El ____ es la especie de hecho ilícito que cae dentro del derecho penal."]),
+C("cuasidelito","Cuasidelito",["cuasidelitos","cuasi delito"],"O","Fuentes de las obligaciones","Diap. 16",
+ "el hecho ilícito no necesariamente del ámbito penal, cometido por imprudencia, negligencia o falta de reflexión, que puede constituir falta administrativa",
+ ["El ____ es el hecho ilícito no necesariamente del ámbito penal que se comete por imprudencia, negligencia o falta de reflexión y que puede ser una falta administrativa."]),
+C("ley-fuente","La ley",["ley","la ley como fuente"],"O","Fuentes de las obligaciones","Diap. 17",
+ "la norma de comportamiento general, impersonal y abstracta, obligatoria para todas las personas, que como fuente genera obligaciones tales como la pensión alimenticia o el pago de impuestos",
+ ["Cuando actúa como generadora de obligaciones, como en la pensión alimenticia o el pago de impuestos, la fuente es ____, norma de comportamiento general, impersonal y abstracta, obligatoria para todas las personas."]),
+
+C("obl-condicional","Obligación condicional",["obligaciones condicionales","obligacion condicionada"],"O","Modalidades","Diap. 19",
+ "la obligación cuya existencia o resolución depende de un acontecimiento futuro e incierto",
+ ["La ____ es aquella cuya existencia o cuya resolución dependen de un acontecimiento futuro e incierto."]),
+C("cond-suspensiva","Condición suspensiva",["condicion suspensiva"],"O","Modalidades","Diap. 19",
+ "la condición de cuyo cumplimiento depende la existencia de la obligación, como cuando el padre promete un auto si su hijo aprueba la materia",
+ ["La ____ es aquella de cuyo cumplimiento depende la existencia de la obligación; por ejemplo: «Si Hiram aprueba la materia, le regalará su papá un auto»."]),
+C("cond-resolutoria","Condición resolutoria",["condicion resolutoria"],"O","Modalidades","Diap. 19",
+ "la condición que, cumplida, resuelve la obligación volviendo las cosas al estado que tenían, como si esa obligación no hubiere existido",
+ ["La ____ es aquella que, cumplida, resuelve la obligación, volviendo las cosas al estado que tenían como si esa obligación no hubiere existido."]),
+C("obl-plazo","Obligación a plazo",["obligaciones a plazo","obligacion con plazo","plazo","termino"],"O","Modalidades","Cuestionario",
+ "la obligación para cuyo cumplimiento se ha señalado un día cierto, esto es, aquel que necesariamente ha de llegar",
+ ["La ____ es aquella para cuyo cumplimiento se ha señalado un día cierto, esto es, el que necesariamente ha de llegar."]),
+C("mancomunadas","Obligaciones mancomunadas",["obligacion mancomunada","mancomunidad","mancomunadas"],"O","Modalidades","Diap. 20",
+ "las obligaciones con varios deudores o acreedores, en que la deuda se considera dividida en tantas partes como deudores o acreedores haya, constituyendo cada parte una deuda o crédito, presumidas iguales salvo pacto o ley en contrario",
+ ["Son ____ aquellas en las que hay varios deudores o acreedores, considerándose dividida la deuda en tantas partes como deudores o acreedores haya, y constituyendo cada parte una deuda o crédito."]),
+C("mancom-activa","Mancomunidad activa",["mancomunidad activa"],"O","Modalidades","Diap. 20",
+ "la mancomunidad en que existe pluralidad de acreedores",
+ ["La ____ se presenta cuando hay pluralidad de acreedores."]),
+C("mancom-pasiva","Mancomunidad pasiva",["mancomunidad pasiva"],"O","Modalidades","Diap. 20",
+ "la mancomunidad en que existe pluralidad de deudores",
+ ["La ____ se presenta cuando hay pluralidad de deudores."]),
+C("solidarias","Obligaciones solidarias",["obligacion solidaria","solidaridad","solidarias"],"O","Modalidades","Diap. 20",
+ "las obligaciones en que dos o más acreedores pueden exigir, cada uno por sí, el cumplimiento total, o dos o más deudores están obligados a pagar cada uno por sí solo y en su totalidad la prestación debida",
+ ["Son ____ aquellas en que dos o más acreedores tienen derecho para exigir, cada uno por sí, el cumplimiento total de la obligación, o dos o más deudores están obligados a pagar cada uno por sí solo y en su totalidad la prestación debida."]),
+C("solid-activa","Solidaridad activa",["solidaridad activa"],"O","Modalidades","Diap. 20",
+ "la solidaridad en que existe pluralidad de acreedores, cada uno con derecho a exigir el cumplimiento total",
+ ["En la ____ existe pluralidad de acreedores, cada uno con derecho a exigir por sí el cumplimiento total de la obligación."]),
+C("solid-pasiva","Solidaridad pasiva",["solidaridad pasiva"],"O","Modalidades","Diap. 20",
+ "la solidaridad en que existe pluralidad de deudores, cada uno obligado a pagar por sí solo la totalidad de la prestación",
+ ["En la ____ existe pluralidad de deudores, cada uno obligado a pagar por sí solo y en su totalidad la prestación debida."]),
+C("divisibles","Obligaciones divisibles",["obligacion divisible","divisibles","divisibilidad"],"O","Modalidades","Diap. 21",
+ "las obligaciones cuyo objeto son prestaciones susceptibles de cumplirse parcialmente, como el pago de una suma de dinero pactado a plazos o en pagos parciales",
+ ["Las ____ son aquellas que tienen por objeto prestaciones susceptibles de cumplirse parcialmente, por ejemplo el pago de una suma de dinero pactado a plazos o en pagos parciales."]),
+C("indivisibles","Obligaciones indivisibles",["obligacion indivisible","indivisibles","indivisibilidad"],"O","Modalidades","Diap. 21",
+ "las obligaciones que no pueden cumplirse sino por entero, pues de dividirlas se alteraría su esencia, como la entrega de una computadora o de un automóvil",
+ ["Las ____ son las que no pueden ser cumplidas sino por entero, ya que de dividirlas se alteraría la esencia de la obligación; por ejemplo, la entrega de un automóvil."]),
+
+C("mora","Estado de mora",["mora","estado moratorio","deudor moroso"],"O","Incumplimiento","Diap. 22",
+ "la situación jurídica en que se encuentra el deudor cuando, apercibido por el acreedor para que cumpla, no lo hace",
+ ["El incumplimiento de una obligación produce el ____, situación jurídica en la que se encuentra el deudor cuando, apercibido por el acreedor para que cumpla, no lo hace."]),
+C("dano","Daño",["dano","danos","daños"],"O","Incumplimiento","Diap. 23",
+ "la pérdida o menoscabo que sufre una persona en su patrimonio por la falta de cumplimiento de una obligación",
+ ["Por ____ se entiende la pérdida o menoscabo que sufre una persona en su patrimonio por la falta de cumplimiento de una obligación."]),
+C("perjuicio","Perjuicio",["perjuicios"],"O","Incumplimiento","Diap. 23",
+ "la privación de cualquier ganancia lícita que debiera haberse obtenido con el cumplimiento de la obligación",
+ ["Por ____ se entiende la privación de cualquier ganancia lícita que debiera haberse obtenido con el cumplimiento de la obligación."]),
+
+C("transmision","Transmisión de las obligaciones",["transmision de obligaciones","transmitir obligaciones","transmision de la obligacion"],"O","Transmisión","Diap. 24",
+ "la transferencia de las obligaciones por causa de muerte (herencia intestamentaria o testamento) o entre vivos mediante cesión de derechos, cesión de deudas o subrogación",
+ ["La ____ puede operar por causa de muerte, como en la herencia intestamentaria o el testamento, o en vida de la persona mediante cesión de derechos, cesión de deudas o subrogación."]),
+C("cesion-derechos","Cesión de derechos",["cesion de derecho","cesion de creditos"],"O","Transmisión","Diap. 25",
+ "la forma de transmisión en que el acreedor transfiere a otro los derechos que tiene para con su deudor, sin requerir el consentimiento de este pero debiendo notificársele",
+ ["La ____ se presenta cuando el acreedor transfiere a otro los derechos que tiene para con su deudor; puede hacerse sin el consentimiento del deudor, pero la ley exige que se le notifique."]),
+C("cesion-deudas","Cesión de deudas",["cesion de deuda"],"O","Transmisión","Diap. 26",
+ "la forma de transmisión en que una persona sustituye a otra en su calidad de deudor, para lo cual el acreedor debe consentir expresa o tácitamente",
+ ["La ____ consiste en que una persona sustituya a otra en su calidad de deudor, para lo cual se requiere que el acreedor consienta expresa o tácitamente."]),
+C("subrogacion","Subrogación",["subrogacion"],"O","Transmisión","Diap. 27",
+ "la forma de transmisión en que una persona con interés en que la obligación se cumpla paga al acreedor sustituyéndose en su lugar",
+ ["La ____ se presenta cuando una persona que tiene interés en que una obligación se cumpla paga al acreedor, sustituyéndose en lugar de este."]),
+C("cedente","Cedente",["el cedente"],"O","Transmisión","Diap. 25",
+ "la parte que transfiere sus derechos en la cesión, es decir, el acreedor que cede",
+ ["En la cesión de derechos, las partes que intervienen se llaman ____, quien transfiere el derecho, y cesionario."]),
+C("cesionario","Cesionario",["el cesionario"],"O","Transmisión","Diap. 25",
+ "la parte que recibe los derechos transferidos en la cesión, que pasa a ser el nuevo acreedor",
+ ["En la cesión de derechos, el ____ es quien recibe el derecho transferido y se convierte en el nuevo acreedor, a quien el deudor debe pagar una vez notificada la cesión."])
+);
+B.push(
+C("pago","Pago",["el pago","cumplimiento"],"O","Extinción","Diap. 28",
+ "el modo natural de extinguir las obligaciones, que consiste normalmente en que el deudor cumpla con la obligación contraída de dar o de hacer",
+ ["El ____ es el modo natural de extinguir las obligaciones; normalmente consiste en cumplir, por parte del deudor, con la obligación contraída de dar o de hacer."]),
+C("dacion","Dación en pago",["dacion","dacion en pagos"],"O","Extinción","Diap. 28",
+ "el modo de extinción en que el deudor da al acreedor una cosa distinta de la que debió darle, para lo cual es necesario el consentimiento del acreedor",
+ ["En la ____ el deudor da al acreedor una cosa distinta de la que debió darle; para que la obligación se extinga es necesario el consentimiento del acreedor."]),
+C("compensacion","Compensación",["compensacion"],"O","Extinción","Diap. 28",
+ "el modo de extinción que tiene lugar cuando dos personas reúnen recíprocamente las cualidades de deudor y de acreedor, extinguiéndose las dos deudas hasta el importe de la menor",
+ ["La ____ es el medio de extinguir las obligaciones que tiene lugar cuando en dos personas se reúnen recíprocamente las cualidades de deudor y acreedor; extingue las dos deudas hasta el importe de la menor."]),
+C("confusion","Confusión",["confusion"],"O","Extinción","Diap. 29",
+ "el modo de extinción en que las cualidades de deudor y acreedor se reúnen en una misma persona, como ocurre en los casos de herencia",
+ ["La ____ consiste en que las dos cualidades, de deudor y de acreedor, se reúnan en una misma persona, como ocurre en los casos de herencia."]),
+C("remision","Remisión",["remision"],"O","Extinción","Diap. 29",
+ "el perdón de la deuda, total o parcial, por parte del acreedor, salvo en los casos en que la ley lo prohíbe, como la pensión alimenticia",
+ ["La ____ de una deuda es lo mismo que perdonarla; cualquiera puede renunciar a su derecho y remitir, en todo o en parte, las prestaciones que le son debidas, excepto cuando la ley lo prohíbe, como en la pensión alimenticia."]),
+C("novacion","Novación",["novacion"],"O","Extinción","Diap. 29",
+ "el modo de extinción en que las partes alteran substancialmente el contrato sustituyendo una obligación nueva a la antigua; nunca se presume y debe constar expresamente",
+ ["Hay ____ cuando las partes interesadas en un contrato lo alteran substancialmente, sustituyendo una obligación nueva a la antigua; nunca se presume, debe constar expresamente, como en las reestructuraciones bancarias posteriores a la crisis del 94."]),
+C("perdida-cosa","Pérdida de la cosa",["perdida de la cosa","perdida de cosa"],"O","Extinción","Diap. 30",
+ "el modo de extinción en que la cosa materia de la obligación se pierde o sufre un detrimento tan grave que, a juicio de peritos, no puede emplearse en su uso natural, cumpliendo el deudor con indemnizar su valor legítimo",
+ ["La obligación se extingue por ____ cuando la cosa materia de la misma se ha perdido o ha sufrido un detrimento tan grave que, a juicio de peritos, no puede emplearse en el uso a que naturalmente estaba destinada; el deudor cumple indemnizando el valor legítimo."]),
+C("termino-extintivo","Término extintivo",["prescripcion negativa","prescripcion extintiva","termino extintivo","prescripcion"],"O","Extinción","Diap. 30",
+ "la prescripción negativa o extintiva de derechos, que opera cuando, transcurrido el tiempo señalado por la ley, el acreedor no ejercita sus derechos",
+ ["El ____ es la denominada prescripción negativa o extintiva de derechos: transcurrido el tiempo señalado por la ley, el acreedor no ejercita sus derechos y la obligación se extingue."]),
+C("resolucion","Resolución",["resolucion"],"O","Extinción","Diap. 31",
+ "el modo de extinción por el cual las obligaciones sujetas a condición resolutoria se extinguen cuando la condición se cumple",
+ ["La ____ se refiere a la condición resolutoria: las obligaciones sujetas a esta modalidad se extinguen cuando la condición se cumple."]),
+C("rescision","Rescisión",["rescision"],"O","Extinción","Diap. 31",
+ "la anulación o invalidación del contrato celebrado, ya sea porque ambas partes estén de acuerdo en invalidarlo o porque una de ellas no cumplió con la obligación contraída; se presenta en actos jurídicos bilaterales",
+ ["La ____ consiste en la anulación o invalidación del contrato celebrado, ya sea porque ambas partes estén de acuerdo o porque alguna de ellas no cumplió con la obligación contraída; se presenta en actos jurídicos bilaterales."]),
+C("revocacion","Revocación",["revocacion"],"O","Extinción","Diap. 31",
+ "la anulación o retractación de un acto otorgado o de una disposición hecha, que se produce en los actos unilaterales como la donación o el legado",
+ ["La ____ es la anulación o retractación de un acto que se había otorgado o de una disposición que se había hecho; se produce en los actos unilaterales, como la donación y el legado."])
+);
+B.push(
+C("contratos-preparatorios","Contratos preparatorios",["contrato preparatorio","antecontratos","antecontrato","contratos preliminares","contrato preliminar"],"C","Contratos en general","Diap. 33",
+ "los pactos previos a la celebración del contrato definitivo, de carácter provisional, cuyo objeto es asegurar el cumplimiento de aquel",
+ ["Los ____, también llamados preliminares o antecontratos, son pactos previos a la celebración del contrato definitivo, de carácter provisional, pues solo tienen por objeto asegurar su cumplimiento."]),
+C("promesa","Promesa de contrato",["contrato de promesa","promesa"],"C","Contratos en general","Diap. 33",
+ "el contrato por el cual una de las partes, llamada promitente, se obliga con su acreedor a celebrar, dentro de cierto tiempo, un contrato futuro determinado; solo da origen a obligaciones de hacer",
+ ["Mediante la ____ uno o varios contratantes pueden asumir la obligación de celebrar, dentro de cierto tiempo, un contrato futuro determinado; solo da origen a obligaciones de hacer."]),
+C("promitente","Promitente",["el promitente"],"C","Contratos en general","Diap. 33",
+ "la parte que en el contrato de promesa se obliga a la celebración de un contrato futuro",
+ ["En la promesa de contrato, la parte que se obliga a celebrar el contrato futuro se denomina ____, y la otra, beneficiario."]),
+C("beneficiario","Beneficiario",["el beneficiario"],"C","Contratos en general","Diap. 33",
+ "la parte a cuyo favor el promitente se obliga a celebrar el contrato futuro en la promesa de contrato",
+ ["En la promesa de contrato, la parte frente a la cual el promitente se obliga a celebrar el contrato futuro se denomina ____."]),
+C("trasl-dominio","Contratos traslativos de dominio",["traslativos de dominio","contrato traslativo de dominio"],"C","Traslativos de dominio","Diap. 34",
+ "los contratos mediante los cuales se traslada la «nuda propiedad», es decir, la propiedad de un bien; la ley regula la compra-venta, la permuta, la donación y el mutuo",
+ ["Mediante los ____ se traslada la llamada «nuda propiedad», es decir, la propiedad de un bien; entre ellos la ley regula la compra-venta, la permuta, la donación y el mutuo."]),
+C("trasl-uso","Contratos traslativos de uso",["traslativos de uso","contrato traslativo de uso"],"C","Traslativos de uso","Diap. 39",
+ "los contratos en que no se transmite la propiedad de un bien y solo se permite su uso por otras personas; la ley regula el comodato y el arrendamiento",
+ ["En los ____ no se transmite la propiedad de un bien, solo se permite su uso por otras personas; la ley regula el comodato y el arrendamiento."]),
+
+C("compraventa","Compra-venta",["compraventa","compra venta","contrato de compraventa","contrato de compra venta"],"C","Traslativos de dominio","Diap. 35",
+ "el contrato por el cual el vendedor se obliga a transferir la propiedad de una cosa o de un derecho y el comprador a pagar por ellos un precio cierto y en dinero",
+ ["La ____ es el contrato por el cual una persona llamada vendedor se obliga a transferir a otra llamada comprador la propiedad de una cosa o de un derecho, y este, a su vez, se obliga a pagar por ellos un precio cierto y en dinero."]),
+C("vendedor","Vendedor",["el vendedor"],"C","Traslativos de dominio","Diap. 35",
+ "la parte que en la compra-venta se obliga a transferir la propiedad de una cosa o de un derecho",
+ ["En la compra-venta, la persona que se obliga a transferir la propiedad de una cosa o de un derecho se denomina ____."]),
+C("comprador","Comprador",["el comprador"],"C","Traslativos de dominio","Diap. 35",
+ "la parte que en la compra-venta se obliga a pagar un precio cierto y en dinero",
+ ["En la compra-venta, la persona que se obliga a pagar un precio cierto y en dinero se denomina ____."]),
+C("precio-cierto","Precio",["precio cierto","precio cierto y en dinero","el precio"],"C","Traslativos de dominio","Diap. 35",
+ "el elemento de la compra-venta que debe ser cierto y en dinero; si se paga parte en dinero y parte con el valor de otra cosa, el contrato es de venta cuando lo pagado en numerario es igual o mayor al valor de la cosa",
+ ["En la compra-venta el ____ debe ser cierto y en dinero; si se paga parte en dinero y parte con otra cosa, el contrato será de venta cuando la parte en numerario sea igual o mayor al valor de la cosa."]),
+C("consensual","Contrato consensual",["consensual","contrato consensual"],"C","Traslativos de dominio","Diap. 35",
+ "el contrato que se perfecciona y es obligatorio cuando las partes convienen en el precio y la cosa, aunque el primero no haya sido pagado ni la segunda entregada, como la regla general de la compra-venta",
+ ["Por regla general la compra-venta es un ____, pues es perfecta y obligatoria cuando las partes han convenido en el precio y la cosa, aunque el primero no haya sido pagado ni la segunda entregada."]),
+C("permuta","Permuta",["contrato de permuta"],"C","Traslativos de dominio","Diap. 36",
+ "el contrato por el cual cada uno de los contratantes se obliga a dar una cosa a cambio de otra",
+ ["La ____ es el contrato por el cual cada uno de los contratantes se obliga a dar una cosa a cambio de otra; en lo no previsto se le aplican las reglas de la compra-venta."]),
+C("permutantes","Permutantes",["permutante"],"C","Traslativos de dominio","Diap. 36",
+ "las partes del contrato de permuta, cada una obligada a dar una cosa a cambio de otra",
+ ["A las partes que intervienen en la permuta se les denomina ____."]),
+C("donacion","Donación",["donacion","contrato de donacion"],"C","Traslativos de dominio","Diap. 37",
+ "el contrato por el que una persona transfiere a otra gratuitamente una parte o la totalidad de sus bienes presentes, sin poder comprender los bienes futuros",
+ ["La ____ es el contrato por el que una persona transfiere a otra gratuitamente una parte o la totalidad de sus bienes presentes; no puede comprender los bienes futuros."]),
+C("donante","Donante",["el donante"],"C","Traslativos de dominio","Diap. 37",
+ "la parte que da, es decir, quien transfiere gratuitamente sus bienes en la donación",
+ ["En la donación, la parte que transfiere gratuitamente sus bienes, es decir, quien da, se denomina ____."]),
+C("donatario","Donatario",["el donatario"],"C","Traslativos de dominio","Diap. 37",
+ "la parte que recibe, es decir, quien adquiere gratuitamente los bienes en la donación",
+ ["En la donación, la parte que recibe gratuitamente los bienes se denomina ____."]),
+C("donacion-pura","Donación pura",["donacion pura"],"C","Traslativos de dominio","Diap. 37",
+ "la donación que no está sujeta a modalidades",
+ ["La ____ es la donación que no está sujeta a modalidades."]),
+C("donacion-condicional","Donación condicional",["donacion condicional"],"C","Traslativos de dominio","Diap. 37",
+ "la donación que depende de un acontecimiento futuro e incierto",
+ ["La ____ es la que depende de un acontecimiento futuro e incierto."]),
+C("donacion-onerosa","Donación onerosa",["donacion onerosa"],"C","Traslativos de dominio","Diap. 37",
+ "la donación que se hace imponiendo algunos gravámenes al donatario, como la obligación de cuidar a otra persona",
+ ["La ____ es la que se hace imponiendo algunos gravámenes al donatario, por ejemplo la obligación de cuidar a otra persona."]),
+C("donacion-remuneratoria","Donación remuneratoria",["donacion remuneratoria"],"C","Traslativos de dominio","Diap. 37",
+ "la donación que se hace en atención a servicios recibidos por el donante y que este no tiene obligación de pagar",
+ ["La ____ es la que se hace en atención a servicios recibidos por el donante y que este no tiene obligación de pagar."]),
+C("mutuo","Mutuo",["contrato de mutuo","prestamo de consumo"],"C","Traslativos de dominio","Diap. 38 y 41",
+ "el contrato por el cual el mutuante se obliga a transferir la propiedad de una suma de dinero o de otras cosas fungibles al mutuario, quien se obliga a devolver otro tanto de la misma especie y calidad",
+ ["El ____ es el contrato por el cual una persona llamada mutuante se obliga a transferir la propiedad de una suma de dinero o de otras cosas fungibles a otra llamada mutuario, quien se obliga a devolver otro tanto de la misma especie y calidad.",
+  "Se denomina también «préstamo de consumo» al contrato de ____, porque la cosa prestada puede ser consumida por el mutuario.",
+  "A diferencia del comodato, el ____ tiene por objeto cosas fungibles y permite estipular intereses."]),
+C("mutuante","Mutuante",["el mutuante"],"C","Traslativos de dominio","Diap. 38",
+ "la parte que da, es decir, quien transfiere la propiedad del dinero o de las cosas fungibles en el mutuo",
+ ["En el mutuo, la parte que da, quien transfiere la propiedad del dinero o de las cosas fungibles, se denomina ____."]),
+C("mutuario","Mutuario",["el mutuario"],"C","Traslativos de dominio","Diap. 38",
+ "la parte que recibe la cosa en el mutuo y se obliga a devolver otro tanto de la misma especie y calidad",
+ ["En el mutuo, la parte que recibe la cosa materia del contrato y se obliga a devolver otro tanto de la misma especie y calidad se denomina ____."]),
+C("mutuo-simple","Mutuo simple",["mutuo gratuito"],"C","Traslativos de dominio","Diap. 38",
+ "el mutuo en que hay transferencia gratuita del dominio de bienes que se restituyen por otros de la misma especie, calidad y cantidad",
+ ["El ____ se integra por la transferencia del dominio de bienes, que dicha transferencia sea gratuita y que se restituyan por otros de la misma especie, calidad y cantidad."]),
+C("mutuo-interes","Mutuo con interés",["mutuo con intereses","mutuo oneroso"],"C","Traslativos de dominio","Diap. 38 y 41",
+ "el mutuo en que se estipulan intereses a cargo del mutuario, posibilidad que no existe en el comodato",
+ ["El ____ es el tipo de mutuo en que se estipulan intereses, lo cual no es posible en el comodato porque entonces se confundiría con el arrendamiento."])
+);
+B.push(
+C("comodato","Comodato",["contrato de comodato","prestamo de uso"],"C","Traslativos de uso","Diap. 40-41",
+ "el contrato por el cual uno de los contratantes concede gratuitamente el uso de una cosa no fungible y el otro se obliga a restituirla individualmente",
+ ["El ____ es un contrato por el cual uno de los contratantes se obliga a conceder gratuitamente el uso de una cosa no fungible y el otro contrae la obligación de restituirla individualmente.",
+  "Se le llama también «préstamo de uso» al ____, porque la cosa se da al comodatario en uso y no en propiedad, y este debe devolverla individualmente sin consumirla."]),
+C("arrendamiento","Arrendamiento",["contrato de arrendamiento"],"C","Traslativos de uso","Diap. 42",
+ "el contrato por el que ambas partes se obligan recíprocamente, una a conceder el uso o goce temporal de una cosa y la otra a pagar por ese uso o goce un precio cierto",
+ ["El ____ es el contrato por el que ambas partes se obligan recíprocamente, una a conceder el uso o goce temporal de una cosa y la otra a pagar por ese uso o goce un precio cierto."]),
+C("renta","Renta",["alquiler","renta o alquiler"],"C","Traslativos de uso","Diap. 42",
+ "la suma de dinero o la cosa cierta que se paga como precio por el uso o goce en el arrendamiento",
+ ["La suma de dinero o la cosa cierta que se paga como precio en el arrendamiento recibe el nombre de ____ o alquiler."]),
+C("arrendador","Arrendador",["el arrendador"],"C","Traslativos de uso","Diap. 42",
+ "la parte que da en arrendamiento, es decir, quien concede el uso o goce temporal de la cosa",
+ ["En el arrendamiento, la parte que da la cosa en arrendamiento se denomina ____."]),
+C("arrendatario","Arrendatario",["el arrendatario"],"C","Traslativos de uso","Diap. 42",
+ "la parte que recibe la cosa en arrendamiento y paga la renta por su uso o goce",
+ ["En el arrendamiento, la parte que recibe la cosa materia del contrato y paga la renta se denomina ____."]),
+
+C("deposito","Depósito",["deposito","contrato de deposito"],"C","Guarda de bienes","Diap. 43",
+ "el contrato por el cual el depositario se obliga a recibir un bien, mueble o inmueble, que le confía el depositante y a guardarlo para restituirlo cuando este se lo pida",
+ ["El ____ es un contrato por el cual el depositario se obliga a recibir un bien, mueble o inmueble, que le confía el depositante y a guardarlo para restituirlo cuando este se lo pida."]),
+C("depositante","Depositante",["el depositante"],"C","Guarda de bienes","Diap. 43",
+ "la parte que entrega el bien para su guarda y que, si el depósito es oneroso, debe retribuir conforme a lo pactado e indemnizar los gastos de conservación",
+ ["En el depósito, quien entrega el bien para su guarda se denomina ____."]),
+C("depositario","Depositario",["el depositario"],"C","Guarda de bienes","Diap. 43",
+ "la parte que recibe el bien, lo guarda y conserva y posteriormente lo restituye al depositante",
+ ["En el depósito, quien recibe el bien, tiene la obligación de guardarlo y conservarlo y después restituirlo, se denomina ____."]),
+C("secuestro","Secuestro",["contrato de secuestro"],"C","Guarda de bienes","Diap. 44",
+ "el contrato por el cual dos o más personas entregan en posesión una cosa litigiosa o controvertida a un tercero para que la custodie y conserve hasta que se adjudique el derecho discutido a uno de ellas",
+ ["El ____ es el contrato por el cual dos o más personas, llamadas secuestrantes, entregan en posesión una cosa litigiosa o controvertida a un tercero, denominado secuestratario, para que la custodie y conserve hasta que se adjudique el derecho discutido a uno de los secuestrantes."]),
+C("secuestrantes","Secuestrantes",["secuestrante"],"C","Guarda de bienes","Diap. 44",
+ "las personas que entregan en posesión una cosa litigiosa o controvertida a un tercero en el secuestro",
+ ["En el secuestro, las personas que entregan en posesión la cosa litigiosa o controvertida a un tercero se denominan ____."]),
+C("secuestratario","Secuestratario",["el secuestratario"],"C","Guarda de bienes","Diap. 44",
+ "el tercero que recibe la cosa litigiosa en el secuestro para custodiarla y conservarla hasta que se adjudique el derecho discutido",
+ ["En el secuestro, el tercero que recibe la cosa litigiosa para custodiarla y conservarla se denomina ____."]),
+C("secuestro-convencional","Secuestro convencional",["secuestro por convenio"],"C","Guarda de bienes","Diap. 44",
+ "la clase de secuestro que nace del acuerdo de las partes, a diferencia del judicial, que se decreta por la autoridad judicial",
+ ["De las dos clases de secuestro, el ____ es el que nace del acuerdo de las partes, a diferencia del judicial."]),
+C("secuestro-judicial","Secuestro judicial",["secuestro por orden judicial"],"C","Guarda de bienes","Diap. 44",
+ "la clase de secuestro que se decreta por la autoridad judicial, a diferencia del convencional, que nace del acuerdo de las partes",
+ ["De las dos clases de secuestro, el ____ es el que se decreta por la autoridad judicial, a diferencia del convencional."]),
+
+C("mandato","Mandato",["contrato de mandato"],"C","Obligaciones de hacer","Diap. 45",
+ "el contrato por el que el mandatario se obliga a ejecutar por cuenta del mandante los actos jurídicos que este le encarga",
+ ["El ____ es un contrato por el que el mandatario se obliga a ejecutar por cuenta de otro los actos jurídicos que este le encarga."]),
+C("mandante","Mandante",["el mandante"],"C","Obligaciones de hacer","Diap. 45",
+ "la parte que encomienda el mandato, es decir, quien encarga la ejecución de los actos jurídicos",
+ ["En el mandato, quien encomienda la ejecución de los actos jurídicos se denomina ____."]),
+C("mandatario","Mandatario",["el mandatario","apoderado"],"C","Obligaciones de hacer","Diap. 45",
+ "la parte que ejecuta los actos jurídicos que le encarga el mandante",
+ ["En el mandato, quien ejecuta los actos jurídicos que le fueron encargados se denomina ____."]),
+C("mandato-general","Mandato general",["poder general"],"C","Obligaciones de hacer","Diap. 45",
+ "el mandato conferido para todo tipo de actos jurídicos",
+ ["El ____ es el que se confiere para todo tipo de actos jurídicos, a diferencia del especial."]),
+C("mandato-especial","Mandato especial",["poder especial"],"C","Obligaciones de hacer","Diap. 45",
+ "el mandato conferido para la realización de algún acto jurídico en particular",
+ ["El ____ es el que se confiere para la realización de algún acto jurídico en particular, a diferencia del general."]),
+C("poder-dominio","Poder para actos de dominio",["poder de dominio","actos de dominio"],"C","Obligaciones de hacer","Diap. 46",
+ "el poder que autoriza al mandatario a realizar actos de dominio por cuenta del mandante",
+ ["El ____ es el que autoriza al mandatario para que realice actos de dominio por cuenta del mandante."]),
+C("poder-admin","Poder para actos de administración",["poder de administracion","actos de administracion"],"C","Obligaciones de hacer","Diap. 46",
+ "el poder que otorga al mandatario facultades para realizar actos de administración en nombre del mandante y obligarlo jurídicamente, el que generalmente tienen los gerentes de las empresas",
+ ["El ____ otorga al mandatario facultades para realizar actos de administración en nombre del mandante y obligarlo jurídicamente; es el que generalmente tienen los gerentes de las empresas."]),
+C("poder-pleitos","Poder para pleitos y cobranzas",["pleitos y cobranzas","poder de pleitos y cobranzas"],"C","Obligaciones de hacer","Diap. 46",
+ "el poder conforme al cual el mandatario actúa como representante del mandante en todos los juicios en que deba comparecer; es el que se da a los abogados",
+ ["Conforme al ____ el mandatario actúa como representante del mandante en todos los juicios en los que deba comparecer; es el poder que se da a los abogados."]),
+C("serv-prof","Prestación de servicios profesionales",["servicios profesionales","contrato de prestacion de servicios profesionales","prestacion de servicios profesionales"],"C","Obligaciones de hacer","Diap. 47",
+ "el contrato en que un profesionista, técnico o especialista se obliga a prestar a favor de otro un servicio que requiere sus conocimientos, a cambio de una retribución",
+ ["Habrá contrato de ____ cuando un profesionista, técnico o especialista se obligue a prestar un servicio que requiera de sus conocimientos, a favor de otro, a cambio de una retribución."]),
+C("honorarios","Honorarios",["los honorarios"],"C","Obligaciones de hacer","Diap. 47",
+ "la retribución que las partes fijan de común acuerdo por los servicios profesionales prestados",
+ ["En la prestación de servicios profesionales, la retribución que quien recibe y quien presta el servicio fijan de común acuerdo se denomina ____."]),
+C("obra-precio-alzado","Obra a precio alzado",["contrato de obra a precio alzado","obra a precio fijo","precio alzado"],"C","Obligaciones de hacer","Cuestionario",
+ "el contrato por el cual un empresario dirige una obra y pone los materiales por un precio fijo, asumiendo el riesgo hasta su entrega al dueño",
+ ["El contrato de ____ es aquel por el cual un empresario dirige una obra y pone los materiales por un precio fijo, asumiendo el riesgo hasta su entrega al dueño."]),
+C("hospedaje","Hospedaje",["contrato de hospedaje"],"C","Obligaciones de hacer","Cuestionario",
+ "el contrato por el cual una persona presta a otra albergue mediante una retribución convenida, comprendiendo o no los alimentos y demás gastos según se estipule",
+ ["El contrato de ____ es aquel por el cual una persona presta a otra albergue mediante una retribución convenida, comprendiendo o no los alimentos y demás gastos según se estipule."]),
+
+C("asociacion","Asociación civil",["asociacion","contrato de asociacion","asociaciones civiles"],"C","Asociaciones y sociedades","Diap. 48",
+ "la persona moral que surge cuando varios individuos convienen en reunirse de manera no enteramente transitoria para realizar un fin común, lícito y sin carácter preponderantemente económico, como los clubes sociales o los partidos políticos",
+ ["Las ____ son personas morales que surgen cuando varios individuos convienen en reunirse de manera no enteramente transitoria, para realizar un fin común no prohibido por la ley y que no tenga carácter preponderantemente económico."]),
+C("asociados","Asociados",["asociado","los asociados"],"C","Asociaciones y sociedades","Diap. 49",
+ "el nombre de las partes de la asociación, cuyo fin no tiene carácter preponderantemente económico",
+ ["A diferencia de las sociedades, en las asociaciones sus miembros se denominan ____."]),
+C("sociedad-civil","Sociedad civil",["sociedades civiles","contrato de sociedad","sociedad"],"C","Asociaciones y sociedades","Diap. 49",
+ "el contrato por el que los socios se obligan mutuamente a combinar sus recursos y sus esfuerzos para realizar un fin común de carácter preponderantemente económico, pero que no constituya una especulación comercial",
+ ["La ____ es el contrato por el que los socios se obligan mutuamente a combinar sus recursos y sus esfuerzos para la realización de un fin común, de carácter preponderantemente económico, pero que no constituya una especulación comercial."]),
+C("socios","Socios",["socio","los socios"],"C","Asociaciones y sociedades","Diap. 49",
+ "el nombre de las partes de la sociedad civil, cuyo fin es preponderantemente económico sin constituir especulación mercantil",
+ ["A diferencia de las asociaciones, en las sociedades civiles las partes se denominan ____."]),
+C("obligaciones-socios","Obligaciones de los socios",["obligaciones del socio","obligacion de los socios"],"C","Asociaciones y sociedades","Cuestionario",
+ "el deber de aportar los bienes o industria pactados y de responder por las deudas sociales",
+ ["Las ____ consisten en aportar los bienes o la industria pactados y responder por las deudas sociales."]),
+C("derechos-socios","Derechos de los socios",["derechos del socio","derecho de los socios"],"C","Asociaciones y sociedades","Cuestionario",
+ "las facultades de participar en las utilidades, tener voz y voto y vigilar la administración",
+ ["Los ____ consisten en participar en las utilidades, tener voz y voto, y vigilar la administración."]),
+C("asamblea","Asamblea general de socios",["asamblea general","asamblea de socios","asamblea"],"C","Asociaciones y sociedades","Cuestionario",
+ "el órgano supremo de decisión de la sociedad",
+ ["La ____ es el órgano supremo de decisión de la sociedad."]),
+C("socios-admin","Socios administradores",["socio administrador","administradores"],"C","Asociaciones y sociedades","Cuestionario",
+ "el órgano encargado de la representación y gestión de los negocios sociales",
+ ["Los ____ son el órgano encargado de la representación y gestión de los negocios sociales."]),
+
+C("contrato-aleatorio","Contrato aleatorio",["contratos aleatorios","aleatorio"],"C","Contratos aleatorios","Cuestionario",
+ "el contrato en que la ganancia o la pérdida dependen del azar o de un hecho incierto",
+ ["El ____ es aquel en que la ganancia o la pérdida depende del azar o de un hecho incierto."]),
+C("juego","Juego",["contrato de juego","el juego"],"C","Contratos aleatorios","Cuestionario",
+ "el contrato aleatorio en que las partes participan en el evento del que depende la ganancia o la pérdida",
+ ["En el ____ las partes participan en el evento del que depende la ganancia o pérdida; a diferencia de la apuesta, donde solo sostienen posturas contrarias."]),
+C("apuesta","Apuesta",["contrato de apuesta","la apuesta"],"C","Contratos aleatorios","Cuestionario",
+ "el contrato aleatorio en que las partes no participan en el evento y solo sostienen posturas contrarias",
+ ["En la ____ las partes no participan en el evento del que depende la ganancia o pérdida y solo sostienen posturas contrarias."]),
+C("renta-vitalicia","Renta vitalicia",["contrato de renta vitalicia"],"C","Contratos aleatorios","Cuestionario",
+ "el contrato aleatorio por el cual el deudor se obliga a pagar periódicamente una pensión durante la vida de una o más personas, a cambio de recibir el dominio de dinero o bienes estimados",
+ ["La ____ es el contrato aleatorio por el cual el deudor se obliga a pagar periódicamente una pensión durante la vida de una o más personas determinadas, a cambio de recibir el dominio de una cantidad de dinero o de bienes muebles o raíces estimados."]),
+C("compra-esperanza","Compra de esperanza",["compra de esperanzas","contrato de compra de esperanza"],"C","Contratos aleatorios","Cuestionario",
+ "el contrato que tiene por objeto adquirir por una cantidad determinada los frutos futuros de una cosa o los productos inciertos de un hecho, asumiendo el comprador el riesgo de que no lleguen a existir",
+ ["En la ____ se adquiere por una cantidad determinada los frutos futuros de una cosa o los productos inciertos de un hecho, asumiendo el comprador el riesgo de que no lleguen a existir."]),
+
+C("contratos-garantia","Contratos de garantía",["contrato de garantia","garantia","contratos accesorios"],"C","Garantía","Diap. 50-51",
+ "los contratos accesorios que se celebran para garantizar el cumplimiento de una obligación principal y su preferencia en el pago",
+ ["Los ____ son contratos accesorios que se celebran para asegurar el cumplimiento de una obligación principal y su preferencia en el pago."]),
+C("fianza","Fianza",["contrato de fianza","la fianza"],"C","Garantía","Diap. 50",
+ "el contrato accesorio de garantía por el cual una persona se compromete con el acreedor a pagar por el deudor si este no lo hace; no se presume y debe constar expresamente",
+ ["La ____ es un contrato por el cual una persona se compromete con el acreedor a pagar por el deudor si este no lo hace; es accesorio, no se presume y debe constar expresamente."]),
+C("prenda","Prenda",["contrato de prenda","la prenda"],"C","Garantía","Diap. 51",
+ "el derecho real constituido sobre un bien mueble enajenable para garantizar el cumplimiento de una obligación y su preferencia en el pago",
+ ["La ____ es un contrato accesorio de garantía y un derecho real constituido sobre un bien mueble enajenable para garantizar el cumplimiento de una obligación y su preferencia en el pago."]),
+C("acreedor-pignoraticio","Acreedor pignoraticio",["pignoraticio","acreedor prendario"],"C","Garantía","Diap. 51",
+ "el sujeto de la prenda que es acreedor y recibe el bien mueble en garantía",
+ ["En la prenda, el sujeto que es acreedor y recibe el bien mueble en garantía se denomina ____."]),
+C("deudor-prendario","Deudor prendario",["prendario"],"C","Garantía","Diap. 51",
+ "el sujeto de la prenda que es deudor y otorga el bien mueble en garantía",
+ ["En la prenda, el sujeto que es deudor y otorga el bien mueble en garantía se denomina ____."]),
+C("preferencia-pago","Preferencia en el pago",["preferencia de pago","preferencia"],"C","Garantía","Diap. 51",
+ "el efecto de la prenda consistente en garantizar al acreedor pignoraticio el cumplimiento de la obligación mediante el bien mueble otorgado, cuando el deudor no paga",
+ ["Cuando el deudor no paga, el efecto de la prenda es garantizar al acreedor pignoraticio el cumplimiento de la obligación y su ____ mediante el bien mueble otorgado."]),
+C("hipoteca","Hipoteca",["contrato de hipoteca","la hipoteca"],"C","Garantía","Diap. 51",
+ "la garantía real constituida sobre bienes inmuebles que no se entregan al acreedor, que da derecho a ser pagado con el valor de los bienes en el grado de preferencia establecido por la ley",
+ ["La ____ es una garantía real constituida sobre bienes inmuebles que no se entregan al acreedor y que da derecho a este, en caso de incumplimiento de la obligación garantizada, a ser pagado con el valor de los bienes, en el grado de preferencia establecido por la ley."]),
+C("bien-inmueble","Bien inmueble",["inmueble","bienes inmuebles","inmuebles"],"C","Garantía","Diap. 51",
+ "el bien que, siendo determinado y enajenable, puede ser gravado con hipoteca",
+ ["Con hipoteca puede gravarse cualquier ____ que pueda ser determinado y enajenable."]),
+C("bien-mueble","Bien mueble",["mueble","bienes muebles","muebles"],"C","Garantía","Diap. 51",
+ "el bien enajenable sobre el cual se constituye la prenda",
+ ["La prenda se constituye sobre un ____ enajenable para garantizar el cumplimiento de una obligación."]),
+C("registro-publico","Registro Público de la Propiedad",["registro publico","registro publico de la propiedad"],"C","Garantía","Diap. 51",
+ "la institución en que deben registrarse la prenda y la hipoteca para que causen efectos frente a terceros",
+ ["La hipoteca, al igual que la prenda, debe registrarse en el ____ para que cause efectos frente a terceros."]),
+
+C("franquicia","Contrato de franquicia",["franquicia","la franquicia"],"C","Contratos mercantiles","Diap. 52",
+ "el acuerdo mediante el cual el franquiciante permite al franquiciatario utilizar su marca, conocimientos, métodos y modelo de negocio, a cambio de pagos o regalías y bajo determinadas condiciones",
+ ["El ____ es el acuerdo mediante el cual una persona o empresa permite a otra utilizar su marca, conocimientos, métodos y modelo de negocio, a cambio de pagos o regalías y bajo determinadas condiciones."]),
+C("franquiciante","Franquiciante",["el franquiciante"],"C","Contratos mercantiles","Diap. 52",
+ "la persona o empresa que permite a otra utilizar su marca, conocimientos, métodos y modelo de negocio en la franquicia",
+ ["En la franquicia, la persona o empresa que permite a otra utilizar su marca, conocimientos y modelo de negocio se denomina ____."]),
+C("franquiciatario","Franquiciatario",["el franquiciatario"],"C","Contratos mercantiles","Diap. 52",
+ "la persona o empresa que utiliza la marca, conocimientos y modelo de negocio ajenos a cambio de pagos o regalías en la franquicia",
+ ["En la franquicia, la persona o empresa que utiliza la marca y el modelo de negocio ajenos a cambio de regalías se denomina ____."]),
+C("comision","Comisión mercantil",["comision","contrato de comision mercantil","comision mercantil"],"C","Contratos mercantiles","Diap. 52",
+ "el contrato por el cual el comisionista se obliga a realizar uno o varios actos de comercio por encargo del comitente, generalmente a cambio de una comisión",
+ ["La ____ es el contrato por el cual una persona se obliga a realizar uno o varios actos de comercio por encargo de otra, generalmente a cambio de una comisión."]),
+C("comisionista","Comisionista",["el comisionista"],"C","Contratos mercantiles","Diap. 52",
+ "la persona que se obliga a realizar actos de comercio por encargo del comitente",
+ ["En la comisión mercantil, la persona que se obliga a realizar uno o varios actos de comercio por encargo de otra se denomina ____."]),
+C("comitente","Comitente",["el comitente"],"C","Contratos mercantiles","Diap. 52",
+ "la persona que encarga al comisionista la realización de actos de comercio",
+ ["En la comisión mercantil, la persona que encarga la realización de actos de comercio se denomina ____."]),
+C("suministro","Contrato de suministro",["suministro","el suministro"],"C","Contratos mercantiles","Diap. 52",
+ "el contrato por el cual una persona o empresa se obliga a proporcionar de manera periódica o continua determinados bienes o servicios a otra, a cambio de un precio",
+ ["El ____ es el contrato mediante el cual una persona o empresa se obliga a proporcionar de manera periódica o continua determinados bienes o servicios a otra, a cambio de un precio."]),
+C("factoraje","Factoraje financiero",["factoraje","contrato de factoraje financiero","factoring"],"C","Contratos mercantiles","Diap. 53",
+ "la operación mediante la cual el factorante adquiere derechos de crédito de un cliente, generalmente derivados de ventas a crédito, y le proporciona recursos antes del vencimiento de esos créditos",
+ ["El ____ es la operación mediante la cual una empresa adquiere derechos de crédito que una persona o empresa tiene a su favor, generalmente derivados de ventas a crédito, y proporciona recursos al cliente antes del vencimiento de esos créditos."]),
+C("factorante","Factorante",["el factorante"],"C","Contratos mercantiles","Diap. 53",
+ "la empresa que adquiere los derechos de crédito del cliente y le proporciona recursos antes de su vencimiento",
+ ["En el factoraje financiero, la empresa que adquiere los derechos de crédito del cliente y le proporciona recursos antes de su vencimiento se denomina ____."]),
+C("arr-financiero","Arrendamiento financiero",["contrato de arrendamiento financiero","leasing"],"C","Contratos mercantiles","Diap. 53",
+ "el contrato por el cual una empresa arrendadora adquiere determinados bienes y concede su uso o goce temporal a otra, que paga una cantidad determinada durante un plazo, con opciones finales como comprar el bien, prorrogar el contrato o participar en su venta",
+ ["El ____ es el contrato mediante el cual una empresa arrendadora adquiere determinados bienes y concede su uso o goce temporal a otra, que paga una cantidad determinada durante un plazo establecido; al finalizar, normalmente puede comprar el bien, prorrogar el contrato o participar en su venta."])
+);
+
+/* ===== Utilidades ===== */
+const $=(s,r=document)=>r.querySelector(s);
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const LS="lagunas-v1:";
+const lsGet=(k,d)=>{try{const v=localStorage.getItem(LS+k);return v?JSON.parse(v):d}catch(e){return d}};
+const lsSet=(k,v)=>{try{localStorage.setItem(LS+k,JSON.stringify(v))}catch(e){}};
+const shuffle=a=>{a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a};
+const byId={};B.forEach(c=>{c._forms=formsOf(c);byId[c.id]=c});
+const CARDS=B.flatMap(c=>c.lag.map((t,i)=>({key:c.id+"#"+i,c,t,i})));
+const TEMA={O:"Obligaciones",C:"Contratos"};
+const GRUPOS=[...new Set(B.map(c=>c.grupo))];
+const srcOf=c=>/^Diap/.test(c.sl)?"Presentación · "+c.sl:"Cuestionario del curso";
+const withBlank=(t,html)=>{const[a,b]=t.split("____");return esc(a)+html+esc(b)};
+const cap=s=>s.charAt(0).toUpperCase()+s.slice(1);
+const fmtTime=ms=>{const s=Math.max(0,Math.round(ms/1000));return String(Math.floor(s/60)).padStart(2,"0")+":"+String(s%60).padStart(2,"0")};
+function measure(){const h=$(".top");if(h)document.documentElement.style.setProperty("--hdr",(getComputedStyle(h).position==="sticky"?h.offsetHeight:0)+"px");const b=$(".exambar");if(b)document.documentElement.style.setProperty("--bar",b.offsetHeight+"px")}
+addEventListener("resize",measure);
+
+/* ===== Pestañas ===== */
+const views={flashcards:$("#view-flash"),simulacro:$("#view-sim")};
+function showTab(name,push){
+  if(!views[name])name="flashcards";
+  Object.entries(views).forEach(([k,el])=>el.hidden=k!==name);
+  document.querySelectorAll(".tabs button").forEach(b=>b.setAttribute("aria-selected",String(b.dataset.tab===name)));
+  if(push){try{history.replaceState(null,"","#"+name)}catch(e){}}
+  measure();
+}
+document.querySelectorAll(".tabs button").forEach(b=>b.addEventListener("click",()=>showTab(b.dataset.tab,true)));
+
+/* ===== Flashcards ===== */
+const F={opts:Object.assign({tema:"todos",grupo:"todos",filtro:"todas",azar:false,auto:true},lsGet("fopts",{})),marks:lsGet("marks",{}),deck:[],idx:0,flipped:false,finished:false,confirmReset:false};
+function buildDeck(keepKeys){
+  let d=CARDS.filter(x=>(F.opts.tema==="todos"||x.c.tema===F.opts.tema)&&(F.opts.grupo==="todos"||x.c.grupo===F.opts.grupo));
+  if(F.opts.filtro==="pendientes")d=d.filter(x=>F.marks[x.key]!=="ok");
+  if(F.opts.filtro==="falladas")d=d.filter(x=>F.marks[x.key]==="no");
+  F.deck=F.opts.azar?shuffle(d):d;F.idx=0;F.flipped=false;F.finished=false;
+}
+function renderFlash(){
+  const root=$("#flash-root");
+  const o=F.opts;
+  const grupos=GRUPOS.filter(g=>o.tema==="todos"||B.some(c=>c.grupo===g&&c.tema===o.tema));
+  if(o.grupo!=="todos"&&!grupos.includes(o.grupo))o.grupo="todos";
+  const filters=`<div class="filters">
+    <div class="field"><label for="f-tema">Tema</label><select id="f-tema"><option value="todos">Todos</option><option value="O">Obligaciones</option><option value="C">Contratos</option></select></div>
+    <div class="field"><label for="f-grupo">Subtema</label><select id="f-grupo"><option value="todos">Todos los subtemas</option>${grupos.map(g=>`<option>${esc(g)}</option>`).join("")}</select></div>
+    <div class="field"><label for="f-filtro">Mostrar</label><select id="f-filtro"><option value="todas">Todas las tarjetas</option><option value="pendientes">Pendientes y falladas</option><option value="falladas">Solo falladas</option></select></div>
+    <label class="check"><input type="checkbox" id="f-azar"> Orden aleatorio</label>
+    <label class="check"><input type="checkbox" id="f-auto"> Pasar a la siguiente al marcar</label>
+  </div>`;
+  const total=F.deck.length;
+  const ok=F.deck.filter(x=>F.marks[x.key]==="ok").length,no=F.deck.filter(x=>F.marks[x.key]==="no").length,pend=total-ok-no;
+  let body="";
+  if(!total){
+    body=`<div class="empty">No hay tarjetas con estos filtros.${o.filtro==="falladas"?" Aún no has marcado ninguna como fallada.":""}</div>`;
+  }else if(F.finished){
+    body=`<div class="done"><span class="eyebrow">Mazo terminado</span><h2>${ok} acertadas, ${no} falladas${pend?`, ${pend} sin marcar`:""}</h2>
+      <div class="row">${no?`<button class="btn primary" id="d-falladas">Repasar las falladas</button>`:""}<button class="btn" id="d-again">Volver a empezar</button></div></div>`;
+  }else{
+    const x=F.deck[F.idx],m=F.marks[x.key];
+    const badge=m?`<span class="mark-badge ${m}">${m==="ok"?"Acertada":"Fallada"}</span>`:"";
+    body=`<div class="stats"><span>Tarjeta ${F.idx+1} de ${total}</span><span><span class="ok">${ok} acertadas</span> · <span class="no">${no} falladas</span> · ${pend} pendientes</span></div>
+    <div class="bar" aria-hidden="true"><i class="b-ok" style="width:${ok/total*100}%"></i><i class="b-no" style="width:${no/total*100}%"></i></div>
+    <div class="scene"><button class="card${F.flipped?" flipped":""}" id="card" aria-label="Tarjeta: toca para ${F.flipped?"ver la laguna":"ver el concepto"}">
+      <div class="face front" ${F.flipped?'aria-hidden="true"':""}>
+        <div class="meta"><span class="eyebrow">Laguna · ${esc(x.c.grupo)}</span>${badge}</div>
+        <div class="body"><p class="stmt">${withBlank(x.t,'<span class="blank"></span>')}</p></div>
+        <div class="hint">Toca para ver el concepto</div></div>
+      <div class="face back" ${F.flipped?"":'aria-hidden="true"'}>
+        <div class="meta"><span class="eyebrow">Concepto · ${esc(TEMA[x.c.tema])}</span>${badge}</div>
+        <div class="body"><p class="answer">${esc(x.c.name)}</p>
+          <p class="sentence">${withBlank(x.t,`<mark class="fill">${esc(x.c.name)}</mark>`)}</p>
+          </div>
+        <div class="hint">${esc(srcOf(x.c))}</div></div>
+    </button></div>
+    <div class="nav marks"><button class="btn no" id="m-no" ${F.flipped?"":"disabled"}>No la acerté</button><button class="btn ok" id="m-ok" ${F.flipped?"":"disabled"}>La acerté</button></div>
+    <div class="nav"><button class="btn" id="n-prev" ${F.idx===0?"disabled":""}>← Regresar</button><button class="btn primary" id="n-next">${F.idx===total-1?"Terminar":"Siguiente →"}</button></div>
+    <div class="keys">← → navegar · espacio voltear</div>`;
+  }
+  root.innerHTML=filters+body+`<div style="margin-top:22px;text-align:center">${F.confirmReset?`<span class="also">¿Borrar todas las marcas? </span><button class="btn small no" id="r-yes">Sí, borrar</button> <button class="btn small ghost" id="r-no">Cancelar</button>`:`<button class="btn small ghost" id="r-ask">Reiniciar progreso</button>`}</div>`;
+  $("#f-tema").value=o.tema;$("#f-grupo").value=o.grupo;$("#f-filtro").value=o.filtro;$("#f-azar").checked=o.azar;$("#f-auto").checked=o.auto;
+  const on=(id,ev,fn)=>{const e=$(id);if(e)e.addEventListener(ev,fn)};
+  const reopts=()=>{lsSet("fopts",F.opts);buildDeck();renderFlash()};
+  on("#f-tema","change",e=>{o.tema=e.target.value;o.grupo="todos";reopts()});
+  on("#f-grupo","change",e=>{o.grupo=e.target.value;reopts()});
+  on("#f-filtro","change",e=>{o.filtro=e.target.value;reopts()});
+  on("#f-azar","change",e=>{o.azar=e.target.checked;reopts()});
+  on("#f-auto","change",e=>{o.auto=e.target.checked;lsSet("fopts",o)});
+  on("#card","click",flip);
+  on("#n-prev","click",prev);on("#n-next","click",next);
+  on("#m-ok","click",()=>mark("ok"));on("#m-no","click",()=>mark("no"));
+  on("#d-again","click",()=>{buildDeck();renderFlash()});
+  on("#d-falladas","click",()=>{o.filtro="falladas";reopts()});
+  on("#r-ask","click",()=>{F.confirmReset=true;renderFlash()});
+  on("#r-no","click",()=>{F.confirmReset=false;renderFlash()});
+  on("#r-yes","click",()=>{F.marks={};lsSet("marks",F.marks);F.confirmReset=false;buildDeck();renderFlash()});
+}
+function flip(){if(!F.deck.length||F.finished)return;F.flipped=!F.flipped;const c=$("#card");if(!c)return;c.classList.toggle("flipped",F.flipped);
+  c.querySelector(".front").toggleAttribute("aria-hidden",F.flipped);c.querySelector(".back").toggleAttribute("aria-hidden",!F.flipped);
+  $("#m-ok").disabled=!F.flipped;$("#m-no").disabled=!F.flipped;}
+function go(i){F.idx=i;F.flipped=false;renderFlash()}
+function prev(){if(F.idx>0)go(F.idx-1)}
+function next(){if(F.idx<F.deck.length-1)go(F.idx+1);else{F.finished=true;F.flipped=false;renderFlash()}}
+function mark(v){const x=F.deck[F.idx];if(!x)return;F.marks[x.key]=v;lsSet("marks",F.marks);
+  if(F.opts.auto){if(F.opts.filtro==="falladas"&&v==="ok"){/* sigue en el mazo hasta terminarlo */}next()}else renderFlash()}
+document.addEventListener("keydown",e=>{
+  if(views.flashcards.hidden||/INPUT|SELECT|TEXTAREA/.test((e.target.tagName||"")))return;
+  if(e.key==="ArrowRight"){e.preventDefault();if(!F.finished&&F.deck.length)next()}
+  else if(e.key==="ArrowLeft"){e.preventDefault();prev()}
+  else if((e.key===" "||e.key==="Enter")&&e.target.tagName!=="BUTTON"){e.preventDefault();flip()}
+});
+/* ===== Simulacro ===== */
+const S={cfg:Object.assign({modo:"normal",tema:"todos",n:30,min:40,tol:true},lsGet("scfg",{})),exam:null,res:null,filtro:"todas",confirm:false,timer:null};
+function pickExam(){
+  const cfg=S.cfg;
+  const pool=shuffle(CARDS.filter(x=>cfg.tema==="todos"||x.c.tema===cfg.tema));
+  const seen=new Set(),items=[];
+  for(const x of pool){if(items.length>=cfg.n)break;if(seen.has(x.c.id))continue;seen.add(x.c.id);items.push({key:x.key,c:x.c,t:x.t,ans:""})}
+  let list=[];
+  if(cfg.modo==="normal"){
+    const chosen=new Set(items.map(i=>i.c.id));
+    const extra=Math.max(3,Math.ceil(items.length/3));
+    const rest=B.filter(c=>!chosen.has(c.id)&&(cfg.tema==="todos"||c.tema===cfg.tema));
+    const extras=[];
+    let guard=0;
+    while(extras.length<extra&&rest.length&&guard++<500){
+      const base=items[Math.floor(Math.random()*items.length)].c;
+      const near=rest.filter(c=>c.grupo===base.grupo&&!extras.includes(c));
+      const pickFrom=near.length?near:rest.filter(c=>!extras.includes(c));
+      if(!pickFrom.length)break;
+      extras.push(pickFrom[Math.floor(Math.random()*pickFrom.length)]);
+    }
+    list=[...items.map(i=>i.c),...extras].sort((a,b)=>norm(a.name).localeCompare(norm(b.name),"es"));
+  }
+  return{items,list,modo:cfg.modo,tol:cfg.tol,active:0,start:Date.now(),dur:cfg.min*60000};
+}
+function renderSim(){
+  const root=$("#sim-root");
+  clearInterval(S.timer);
+  if(S.exam&&!S.res)renderExam(root);
+  else if(S.res)renderResult(root);
+  else renderSetup(root);
+  measure();
+}
+function renderSetup(root){
+  const c=S.cfg;
+  root.innerHTML=`<div class="setup">
+    <div><span class="eyebrow">Simulacro de examen</span><h2>Llena las lagunas</h2>
+    <p class="lead">Cada examen toma lagunas al azar de un banco de ${CARDS.length} (${B.length} conceptos). Al terminar, cada respuesta lleva su retroalimentación con base en la presentación.</p></div>
+    <div class="field"><span class="lab">Modo</span><div class="seg">
+      <button class="opt" data-modo="normal" aria-pressed="${c.modo==="normal"}"><b>Normal · con lista de conceptos</b><span>Hay más conceptos en la lista que lagunas. Toca uno o escríbelo.</span></button>
+      <button class="opt" data-modo="dificil" aria-pressed="${c.modo==="dificil"}"><b>Difícil · sin lista</b><span>Escribes el concepto de memoria.</span></button></div></div>
+    <div class="row-fields">
+      <div class="field"><label for="s-tema">Tema</label><select id="s-tema"><option value="todos">Obligaciones y Contratos</option><option value="O">Solo Obligaciones</option><option value="C">Solo Contratos</option></select></div>
+      <div class="field"><label for="s-n">Lagunas</label><select id="s-n">${[10,20,30,40].map(n=>`<option value="${n}">${n}</option>`).join("")}</select></div>
+      <div class="field"><label for="s-min">Tiempo</label><select id="s-min">${[15,25,40,60,90].map(n=>`<option value="${n}">${n} minutos</option>`).join("")}</select></div>
+    </div>
+    <label class="check"><input type="checkbox" id="s-tol"> Tolerar errores de ortografía al calificar</label>
+    <div class="note">Se ignoran mayúsculas, acentos y artículos. Con la tolerancia activa también se aceptan letras de más, de menos o intercambiadas (por ejemplo «subrogasion» o «rescicion»), siempre que lo escrito no se parezca más a otro concepto. Si aceptamos una respuesta con error, te lo indicamos en la retroalimentación.</div>
+    <div><button class="btn primary" id="s-go">Comenzar simulacro</button></div></div>`;
+  $("#s-tema").value=c.tema;$("#s-n").value=String(c.n);$("#s-min").value=String(c.min);$("#s-tol").checked=c.tol;
+  root.querySelectorAll(".opt").forEach(b=>b.addEventListener("click",()=>{c.modo=b.dataset.modo;lsSet("scfg",c);renderSetup(root)}));
+  $("#s-tema").onchange=e=>{c.tema=e.target.value;lsSet("scfg",c)};
+  $("#s-n").onchange=e=>{c.n=+e.target.value;c.min=Math.round(c.n*1.35/5)*5||15;$("#s-min").value=String([15,25,40,60,90].includes(c.min)?c.min:40);c.min=+$("#s-min").value;lsSet("scfg",c)};
+  $("#s-min").onchange=e=>{c.min=+e.target.value;lsSet("scfg",c)};
+  $("#s-tol").onchange=e=>{c.tol=e.target.checked;lsSet("scfg",c)};
+  $("#s-go").onclick=()=>{S.exam=pickExam();S.res=null;S.confirm=false;S.filtro="todas";renderSim();window.scrollTo(0,0)};
+}
+function answered(){return S.exam.items.filter(i=>i.ans.trim()).length}
+function renderExam(root){
+  const E=S.exam,normal=E.modo==="normal";
+  const qs=E.items.map((it,i)=>`<li class="q${i===E.active?" active":""}" id="q-${i}"><span class="num">${i+1}.</span>
+    <p class="stmt">${withBlank(it.t,`<input class="ans" id="a-${i}" data-i="${i}" type="text" autocomplete="off" autocapitalize="off" autocorrect="off" spellcheck="false" aria-label="Laguna ${i+1}" value="${esc(it.ans)}"><button class="clr" data-clr="${i}" aria-label="Borrar respuesta ${i+1}" ${it.ans?"":"hidden"}>×</button>`)}</p></li>`).join("");
+  const panel=normal?`<aside class="listpanel" id="listpanel" aria-label="Lista de conceptos"><h3>Lista de conceptos</h3><p>${E.list.length} conceptos para ${E.items.length} lagunas. Toca uno para llenar la laguna activa.</p><div class="chips">${E.list.map(c=>`<button class="chip" data-c="${c.id}">${esc(c.name)}</button>`).join("")}</div></aside>`:"";
+  root.innerHTML=`<div class="exambar"><span class="timer" id="timer" role="timer">--:--</span><span class="info" id="prog"></span>
+    <div class="acts" id="acts"></div></div>
+    <div class="examgrid${normal?"":" solo"}">${panel}<ol class="qs">${qs}</ol></div>
+    ${normal?`<button class="btn primary sheetbtn" id="sheetbtn">Conceptos</button>`:""}`;
+  const refresh=()=>{
+    $("#prog").textContent=`${answered()} de ${E.items.length} contestadas`;
+    const used=new Set(E.items.map(i=>norm(i.ans)));
+    root.querySelectorAll(".chip").forEach(ch=>ch.classList.toggle("used",used.has(norm(byId[ch.dataset.c].name))));
+    $("#acts").innerHTML=S.confirm?`<span class="info">${E.items.length-answered()?`Quedan ${E.items.length-answered()} sin contestar. `:""}¿Entregar?</span><button class="btn small primary" id="fin-yes">Entregar</button><button class="btn small ghost" id="fin-no">Seguir</button>`:`<button class="btn small" id="fin">Terminar examen</button>`;
+    const y=$("#fin-yes"),n=$("#fin-no"),f=$("#fin");
+    if(y)y.onclick=()=>finish("entregado");if(n)n.onclick=()=>{S.confirm=false;refresh()};if(f)f.onclick=()=>{S.confirm=true;refresh()};
+    measure();
+  };
+  const setActive=i=>{E.active=i;root.querySelectorAll(".q").forEach((q,k)=>q.classList.toggle("active",k===i))};
+  root.querySelectorAll("input.ans").forEach(inp=>{
+    const i=+inp.dataset.i;
+    inp.addEventListener("focus",()=>setActive(i));
+    inp.addEventListener("input",()=>{E.items[i].ans=inp.value;inp.classList.toggle("filled",!!inp.value.trim());root.querySelector(`[data-clr="${i}"]`).hidden=!inp.value;refresh()});
+    inp.addEventListener("keydown",e=>{if(e.key==="Enter"){e.preventDefault();const nx=$("#a-"+(i+1));if(nx)nx.focus()}});
+    inp.classList.toggle("filled",!!inp.value.trim());
+  });
+  root.querySelectorAll(".clr").forEach(b=>b.addEventListener("click",()=>{const i=+b.dataset.clr;E.items[i].ans="";const inp=$("#a-"+i);inp.value="";inp.focus();b.hidden=true;inp.classList.remove("filled");refresh()}));
+  root.querySelectorAll(".chip").forEach(ch=>ch.addEventListener("click",()=>{
+    const i=E.active;
+    const c=byId[ch.dataset.c];E.items[i].ans=c.name;const inp=$("#a-"+i);inp.value=c.name;inp.classList.add("filled");root.querySelector(`[data-clr="${i}"]`).hidden=false;
+    const nx=E.items.findIndex((x,k)=>k>i&&!x.ans.trim());setActive(nx>=0?nx:i);
+    const q=$("#q-"+(nx>=0?nx:i));if(q&&q.getBoundingClientRect().bottom>innerHeight-80||q.getBoundingClientRect().top<150)q.scrollIntoView({block:"center",behavior:"smooth"});
+    refresh();
+  }));
+  const sb=$("#sheetbtn");if(sb)sb.onclick=()=>{const p=$("#listpanel");const open=p.classList.toggle("open");sb.textContent=open?"Cerrar lista":"Conceptos"};
+  const tick=()=>{const left=E.start+E.dur-Date.now();const t=$("#timer");if(!t)return;t.textContent=fmtTime(left);t.className="timer"+(left<=60000?" crit":left<=300000?" warn":"");if(left<=0)finish("tiempo")};
+  refresh();tick();S.timer=setInterval(tick,250);
+  setActive(E.active);measure();
+}
+function grade(E){
+  return E.items.map((it,i)=>{
+    const raw=it.ans.trim();
+    if(!raw)return{i,it,st:"omit"};
+    const r=resolve(raw,B,E.tol);
+    if(r&&r.concept.id===it.c.id)return{i,it,st:"ok",raw,fuzzy:r.dist>0,canon:it.c.name};
+    if(!E.tol){ // sin tolerancia: lo escrito no coincide exactamente; busca si es otro concepto
+      const r2=resolve(raw,B,false);return{i,it,st:"bad",raw,other:r2&&r2.concept};
+    }
+    return{i,it,st:"bad",raw,other:r?r.concept:null};
+  });
+}
+function finish(why){
+  if(!S.exam)return;
+  clearInterval(S.timer);
+  const E=S.exam,rs=grade(E);
+  S.res={rs,why,used:Math.min(Date.now()-E.start,E.dur),dur:E.dur,modo:E.modo,tol:E.tol};
+  S.confirm=false;renderSim();window.scrollTo(0,0);
+}
+const aD=d=>/^el /.test(d)?"al "+d.slice(3):"a "+d;
+function feedback(r){
+  const c=r.it.c;
+  if(r.st==="ok"){
+    let h=`<p class="fb"><b class="yes">Correcto.</b> «${esc(c.name)}» corresponde ${esc(aD(c.d))}.</p>`;
+    if(r.fuzzy)h+=`<p class="fb">Aceptamos «${esc(r.raw)}» aunque tiene un error de ortografía; se escribe <b>${esc(c.name)}</b>.</p>`;
+    return h;
+  }
+  if(r.st==="omit")return `<p class="fb"><b>Sin contestar.</b> La respuesta era «${esc(c.name)}», porque corresponde ${esc(aD(c.d))}.</p>`;
+  if(r.other){
+    const o=r.other;
+    return `<p class="fb"><b class="no">Error.</b> «${esc(o.name)}» no es, porque designa ${esc(o.d)}.</p>
+    <p class="fb"><b class="yes">La correcta es «${esc(c.name)}»</b>, porque la frase describe ${esc(c.d)}.</p>`;
+  }
+  return `<p class="fb"><b class="no">Error.</b> «${esc(r.raw)}» no corresponde a ningún concepto del temario que encaje con esta frase${S.res&&!S.res.tol?" (la tolerancia ortográfica estaba desactivada)":""}.</p>
+    <p class="fb"><b class="yes">La correcta es «${esc(c.name)}»</b>, porque la frase describe ${esc(c.d)}.</p>`;
+}
+function renderResult(root){
+  const R=S.res,rs=R.rs,N=rs.length;
+  const ok=rs.filter(r=>r.st==="ok").length,bad=rs.filter(r=>r.st==="bad").length,om=rs.filter(r=>r.st==="omit").length;
+  const g=(ok/N*10);
+  const gt=Number.isInteger(g)?String(g):g.toFixed(1);
+  const show=rs.filter(r=>S.filtro==="todas"||(S.filtro==="ok"&&r.st==="ok")||(S.filtro==="bad"&&r.st==="bad")||(S.filtro==="omit"&&r.st==="omit"));
+  const stLabel={ok:["ok","Correcta"],bad:["bad","Incorrecta"],omit:["omit","Omitida"]};
+  const items=show.map(r=>{
+    const c=r.it.c;const cls=r.st==="ok"?"ok":r.st==="bad"?"bad":"omit";
+    let fill;
+    if(r.st==="ok")fill=`<span class="right">${esc(c.name)}</span>`;
+    else if(r.st==="bad")fill=`<span class="given">${esc(r.raw)}</span><span class="arrow"> → </span><span class="right">${esc(c.name)}</span>`;
+    else fill=`<span class="right">${esc(c.name)}</span>`;
+    return `<li class="item s-${cls}"><div class="hd"><span class="eyebrow">Laguna ${r.i+1} · ${esc(c.grupo)}</span><span class="tag ${stLabel[r.st][0]}">${stLabel[r.st][1]}</span></div>
+      <p class="sentence">${withBlank(r.it.t,fill)}</p>${feedback(r)}<span class="src">${esc(srcOf(c))}</span></li>`;
+  }).join("");
+  const fails=bad+om;
+  root.innerHTML=`<div class="result">
+    <div class="headline"><div><span class="eyebrow">Resultado · modo ${R.modo==="normal"?"normal":"difícil"}${R.why==="tiempo"?" · se acabó el tiempo":""}</span><h2>${ok} de ${N} lagunas correctas</h2></div>
+      <span class="eyebrow">Tiempo usado ${fmtTime(R.used)} de ${fmtTime(R.dur)}</span></div>
+    <div class="score"><div class="tile ok"><span class="n">${ok}</span><span class="l">Correctas</span></div><div class="tile bad"><span class="n">${bad}</span><span class="l">Incorrectas</span></div><div class="tile omit"><span class="n">${om}</span><span class="l">Omitidas</span></div><div class="tile grade"><span class="n">${gt}</span><span class="l">Calificación sobre 10</span></div></div>
+    <div class="bar" aria-hidden="true"><i class="b-ok" style="width:${ok/N*100}%"></i><i class="b-no" style="width:${bad/N*100}%"></i></div>
+    <div style="display:flex;flex-wrap:wrap;gap:10px"><button class="btn primary" id="r-again">Otro simulacro</button><button class="btn" id="r-cfg">Cambiar configuración</button>${fails?`<button class="btn" id="r-study">Estudiar las ${fails} falladas en flashcards</button>`:""}</div>
+    <div class="filt" role="group" aria-label="Filtrar retroalimentación">${[["todas","Todas ("+N+")"],["bad","Incorrectas ("+bad+")"],["omit","Omitidas ("+om+")"],["ok","Correctas ("+ok+")"]].map(([k,l])=>`<button data-f="${k}" aria-pressed="${S.filtro===k}">${l}</button>`).join("")}</div>
+    <ol class="items">${items||'<li class="empty">No hay lagunas en esta categoría.</li>'}</ol></div>`;
+  root.querySelectorAll(".filt button").forEach(b=>b.onclick=()=>{S.filtro=b.dataset.f;renderResult(root);measure()});
+  $("#r-again").onclick=()=>{S.exam=pickExam();S.res=null;S.filtro="todas";renderSim();window.scrollTo(0,0)};
+  $("#r-cfg").onclick=()=>{S.exam=null;S.res=null;renderSim();window.scrollTo(0,0)};
+  const st=$("#r-study");if(st)st.onclick=()=>{
+    rs.filter(r=>r.st!=="ok").forEach(r=>{F.marks[r.it.key]="no"});lsSet("marks",F.marks);
+    F.opts.filtro="falladas";F.opts.tema="todos";F.opts.grupo="todos";lsSet("fopts",F.opts);buildDeck();renderFlash();showTab("flashcards",true);window.scrollTo(0,0);
+  };
+}
+
+/* ===== Arranque ===== */
+buildDeck();renderFlash();renderSim();
+showTab((location.hash||"").replace("#","")==="simulacro"?"simulacro":"flashcards",false);
+requestAnimationFrame(measure);
+if(document.fonts&&document.fonts.ready)document.fonts.ready.then(measure);
+
+</script>
+
+</body></html>
